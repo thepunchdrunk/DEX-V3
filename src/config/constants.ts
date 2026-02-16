@@ -51,7 +51,7 @@ export const MOCK_USER: UserProfile = {
 export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
   {
     id: 'hw-laptop',
-    label: 'Laptop Provisioned',
+    label: 'Verify Laptop',
     category: 'HARDWARE',
     status: 'PASS',
     details: 'MacBook Pro 14" - Ready for pickup at IT Desk',
@@ -61,7 +61,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
 
   {
     id: 'hw-monitor',
-    label: 'External Monitor',
+    label: 'Setup Monitor',
     category: 'HARDWARE',
     status: 'PASS',
     details: 'Dell 27" 4K - Shipped to your desk',
@@ -71,7 +71,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
 
   {
     id: 'sw-email',
-    label: 'Email Account',
+    label: 'Activate Email',
     category: 'SOFTWARE',
     status: 'PASS',
     details: 'alex.thompson@company.com activated',
@@ -80,7 +80,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
   },
   {
     id: 'sw-slack',
-    label: 'Slack Workspace',
+    label: 'Join Slack',
     category: 'SOFTWARE',
     status: 'PASS',
     details: 'Added to #engineering, #qa-team channels',
@@ -89,7 +89,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
   },
   {
     id: 'sw-jira',
-    label: 'Jira License',
+    label: 'Access Jira',
     category: 'SOFTWARE',
     status: 'CHECKING',
     details: 'Provisioning in progress...',
@@ -98,7 +98,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
   },
   {
     id: 'fac-badge',
-    label: 'Building Access Badge',
+    label: 'Collect Badge',
     category: 'FACILITY',
     status: 'PASS',
     details: 'Badge #A3847 - Collect from Security',
@@ -106,7 +106,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
   },
   {
     id: 'hw-safety-kit',
-    label: 'Safety Equipment',
+    label: 'Check Safety Kit',
     category: 'HARDWARE',
     status: 'PASS',
     details: 'Steel-toe boots & hi-vis vest at Locker 42',
@@ -115,7 +115,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
   },
   {
     id: 'hw-tablet-pro',
-    label: 'Ops Tablet',
+    label: 'Pickup Tablet',
     category: 'HARDWARE',
     status: 'PASS',
     details: 'iPad Pro with rugged case - Ready at Floor 2 Hub',
@@ -124,7 +124,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
   },
   {
     id: 'hw-badge-rfid',
-    label: 'RFID Access Badge',
+    label: 'Test RFID Access',
     category: 'FACILITY',
     status: 'PASS',
     details: 'All-zone access enabled',
@@ -133,7 +133,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
   },
   {
     id: 'hw-stipend',
-    label: 'Remote Office Stipend',
+    label: 'Claim Stipend',
     category: 'HARDWARE',
     status: 'PASS',
     details: '$500 credit applied to your portal',
@@ -144,7 +144,7 @@ export const GREEN_LIGHT_CHECKS: GreenLightCheck[] = [
 
   {
     id: 'fac-parking',
-    label: 'Parking Access',
+    label: 'Confirm Parking',
     category: 'FACILITY',
     status: 'PASS',
     details: 'Spot #B-102 assigned',

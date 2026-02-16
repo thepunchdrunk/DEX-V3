@@ -164,7 +164,12 @@ const RoleDashboard: React.FC<RoleDashboardProps> = ({ user, isWednesday = false
                                             <p className="text-sm text-neutral-500 mb-3">{user.jobTitle}</p>
                                             <div className="flex flex-wrap gap-2">
                                                 <span className="badge badge-red">{user.department}</span>
-                                                <span className="badge badge-neutral">{user.roleCategory || 'DESK'}</span>
+                                                <span className="badge badge-neutral">
+                                                    {user.roleCategory === 'DESK' ? 'Office Based' :
+                                                        user.roleCategory === 'FRONTLINE' ? 'Frontline' :
+                                                            user.roleCategory === 'REMOTE' ? 'Remote' :
+                                                                (user.roleCategory || 'Office Based')}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
