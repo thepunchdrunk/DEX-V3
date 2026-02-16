@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DEX — Digital Employee Experience</title>
+  <meta name="description" content="DEX is an intelligent employee experience platform that provides personalized onboarding, skills tracking, and career growth tools." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#E60000',
+              black: '#000000',
+              gray: {
+                50: '#FAFAFA',
+                100: '#F5F5F5',
+                300: '#E0E0E0',
+                500: '#9E9E9E',
+                700: '#616161',
+                900: '#212121',
+              }
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', '"Myriad Pro"', '"Myriad"', '"Liberation Sans"', '"Nimbus Sans L"', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', 'Myriad Pro', 'Myriad', sans-serif;
+      background-color: #FFFFFF;
+      color: #000000;
+    }
+  </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "recharts": "https://esm.sh/recharts@^3.7.0",
+    "d3": "https://esm.sh/d3@^7.9.0"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
