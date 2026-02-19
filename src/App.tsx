@@ -25,10 +25,21 @@ const App: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="w-12 h-12 bg-neutral-200 rounded-full"></div>
-          <p className="text-neutral-400 font-medium">Loading DEX...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 relative overflow-hidden">
+        {/* Subtle background glow */}
+        <div className="absolute w-[400px] h-[400px] rounded-full blur-[120px] bg-brand-red/[0.04] animate-drift" style={{ top: '30%', left: '40%' }} />
+        <div className="flex flex-col items-center gap-5 relative z-10">
+          <div className="w-16 h-16 rounded-2xl bg-white shadow-xl border border-neutral-100 flex items-center justify-center animate-pulse">
+            <span className="text-brand-red font-black text-xl">DX</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-neutral-900 font-bold text-sm tracking-wider">Initializing</p>
+            <div className="flex gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-brand-red animate-bounce" style={{ animationDelay: '0ms' }} />
+              <div className="w-1.5 h-1.5 rounded-full bg-brand-red animate-bounce" style={{ animationDelay: '150ms' }} />
+              <div className="w-1.5 h-1.5 rounded-full bg-brand-red animate-bounce" style={{ animationDelay: '300ms' }} />
+            </div>
+          </div>
         </div>
       </div>
     );

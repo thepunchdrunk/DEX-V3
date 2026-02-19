@@ -34,6 +34,8 @@ const TOOLKIT_CARDS = [
         accentColor: 'text-brand-red',
         iconBg: 'bg-brand-red',
         hoverBorder: 'hover:border-brand-red/30',
+        hoverGradient: 'group-hover:from-red-50 group-hover:to-white',
+        accentLine: 'bg-brand-red',
     },
     {
         id: 'BOUNTIES' as ToolId,
@@ -44,6 +46,8 @@ const TOOLKIT_CARDS = [
         accentColor: 'text-orange-600',
         iconBg: 'bg-gradient-to-br from-orange-400 to-red-500',
         hoverBorder: 'hover:border-orange-300',
+        hoverGradient: 'group-hover:from-orange-50 group-hover:to-white',
+        accentLine: 'bg-orange-500',
     },
     {
         id: 'MENTORS' as ToolId,
@@ -54,6 +58,8 @@ const TOOLKIT_CARDS = [
         accentColor: 'text-blue-600',
         iconBg: 'bg-gradient-to-br from-blue-500 to-indigo-600',
         hoverBorder: 'hover:border-blue-300',
+        hoverGradient: 'group-hover:from-blue-50 group-hover:to-white',
+        accentLine: 'bg-blue-500',
     },
     {
         id: 'LEADERBOARD' as ToolId,
@@ -64,6 +70,8 @@ const TOOLKIT_CARDS = [
         accentColor: 'text-indigo-600',
         iconBg: 'bg-gradient-to-br from-indigo-500 to-purple-600',
         hoverBorder: 'hover:border-indigo-300',
+        hoverGradient: 'group-hover:from-indigo-50 group-hover:to-white',
+        accentLine: 'bg-indigo-500',
     },
     {
         id: 'LESSONS' as ToolId,
@@ -74,6 +82,8 @@ const TOOLKIT_CARDS = [
         accentColor: 'text-rose-600',
         iconBg: 'bg-gradient-to-br from-rose-400 to-pink-500',
         hoverBorder: 'hover:border-rose-300',
+        hoverGradient: 'group-hover:from-rose-50 group-hover:to-white',
+        accentLine: 'bg-rose-500',
     },
     {
         id: 'OFFICE_HOURS' as ToolId,
@@ -84,6 +94,8 @@ const TOOLKIT_CARDS = [
         accentColor: 'text-teal-600',
         iconBg: 'bg-gradient-to-br from-teal-400 to-cyan-500',
         hoverBorder: 'hover:border-teal-300',
+        hoverGradient: 'group-hover:from-teal-50 group-hover:to-white',
+        accentLine: 'bg-teal-500',
     },
 ];
 
@@ -111,7 +123,9 @@ const InsightsHub: React.FC<InsightsHubProps> = ({ className = '' }) => {
                     )}
                 </div>
 
-                <div className="bg-neutral-50 rounded-2xl p-4 md:p-6 border border-neutral-200 min-h-[600px] page-transition">
+                <div className="bg-white rounded-2xl p-4 md:p-6 border border-neutral-200 min-h-[600px] page-transition relative overflow-hidden shadow-sm">
+                    {/* Top accent line matching active tool color */}
+                    {activeCard && <div className={`absolute top-0 left-0 right-0 h-[3px] ${activeCard.accentLine} rounded-t-2xl`} />}
                     {activeTool === 'SIMULATOR' && <EnhancedSimulator />}
                     {activeTool === 'BOUNTIES' && <BountyBoard />}
                     {activeTool === 'MENTORS' && <MentorMatch />}
@@ -137,18 +151,20 @@ const InsightsHub: React.FC<InsightsHubProps> = ({ className = '' }) => {
                         <button
                             key={tool.id}
                             onClick={() => setActiveTool(tool.id)}
-                            className={`group flex flex-col p-5 rounded-2xl bg-white border border-neutral-200 ${tool.hoverBorder} hover:shadow-md text-left transition-all card-interactive animate-fade-in-up`}
+                            className={`group relative flex flex-col p-5 rounded-2xl bg-gradient-to-br from-white to-white border border-neutral-200 ${tool.hoverBorder} ${tool.hoverGradient} hover:shadow-lg hover:-translate-y-1 text-left transition-all duration-500 ease-out overflow-hidden animate-fade-in-up`}
                             style={{ animationDelay: `${(index + 1) * 80}ms` }}
                         >
-                            <div className={`w-10 h-10 rounded-xl ${tool.iconBg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                            <div className={`w-10 h-10 rounded-xl ${tool.iconBg} flex items-center justify-center mb-4 group-hover:scale-110 group-hover:animate-float-gentle transition-transform duration-500 shadow-md`}>
                                 <tool.icon className="w-5 h-5 text-white" />
                             </div>
-                            <h3 className="font-bold text-black mb-1">{tool.title}</h3>
+                            <h3 className="font-bold text-neutral-900 mb-1 transition-colors group-hover:text-neutral-900">{tool.title}</h3>
                             <p className="text-xs text-neutral-500 mb-4 flex-1 leading-relaxed">{tool.description}</p>
-                            <div className={`flex items-center gap-2 text-xs font-semibold ${tool.accentColor}`}>
+                            <div className={`flex items-center gap-2 text-xs font-bold ${tool.accentColor}`}>
                                 <span className="uppercase tracking-wider">{tool.action}</span>
-                                <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                <ChevronRight className="w-3 h-3 group-hover:translate-x-1.5 transition-transform duration-300" />
                             </div>
+                            {/* Bottom accent sweep */}
+                            <div className={`absolute bottom-0 left-0 right-0 h-[2px] ${tool.accentLine} scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left opacity-50`} />
                         </button>
                     ))}
                 </div>

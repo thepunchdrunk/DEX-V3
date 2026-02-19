@@ -50,10 +50,19 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
 
     const getHealthColor = (health: SkillHealth) => {
         switch (health) {
-            case 'THRIVING': return 'bg-emerald-500 text-white shadow-emerald-500/40';
-            case 'HEALTHY': return 'bg-emerald-400 text-white shadow-emerald-400/30';
-            case 'FADING': return 'bg-amber-400 text-white shadow-amber-400/30';
-            case 'DECAYED': return 'bg-neutral-400 text-white shadow-neutral-400/30';
+            case 'THRIVING': return 'bg-emerald-500 text-white';
+            case 'HEALTHY': return 'bg-emerald-400 text-white';
+            case 'FADING': return 'bg-amber-400 text-white';
+            case 'DECAYED': return 'bg-neutral-400 text-white';
+        }
+    };
+
+    const getHealthDot = (health: SkillHealth) => {
+        switch (health) {
+            case 'THRIVING': return 'bg-emerald-500';
+            case 'HEALTHY': return 'bg-emerald-400';
+            case 'FADING': return 'bg-amber-400';
+            case 'DECAYED': return 'bg-neutral-300';
         }
     };
 
@@ -72,14 +81,15 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
         const isExpanded = expandedBranches.includes(branch.id);
         const healthClasses = getHealthColor(branch.health);
         const healthText = getHealthText(branch.health);
+        const healthDot = getHealthDot(branch.health);
 
         return (
             <div key={branch.id} className="relative animate-fade-in-up">
                 <div
                     className={`
                         flex items-center gap-4 p-4 rounded-xl transition-all cursor-pointer duration-300
-                        glass-panel hover:bg-white/80 border-transparent hover:border-neutral-200
-                        hover:translate-x-1
+                        bg-white hover:bg-neutral-50 border border-transparent hover:border-neutral-200
+                        hover:shadow-sm hover:translate-x-1
                     `}
                     style={{ marginLeft: `${depth * 28}px` }}
                     onClick={() => hasChildren && toggleBranch(branch.id)}
@@ -93,7 +103,7 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                     )}
 
                     {/* Visual Node */}
-                    <div className={`w-10 h-10 rounded-xl ${healthClasses} flex items-center justify-center shadow-lg transition-transform group-hover:scale-110`}>
+                    <div className={`w-10 h-10 rounded-xl ${healthClasses} flex items-center justify-center shadow-md transition-transform group-hover:scale-110`}>
                         <TreePine className="w-5 h-5" />
                     </div>
 
@@ -103,7 +113,10 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                             {branch.health === 'FADING' && <AlertTriangle className="w-4 h-4 text-amber-500 animate-pulse" />}
                         </div>
                         <div className="flex items-center gap-3 text-xs font-medium">
-                            <span className={healthText}>{branch.health}</span>
+                            <span className="flex items-center gap-1.5">
+                                <span className={`w-1.5 h-1.5 rounded-full ${healthDot}`} />
+                                <span className={healthText}>{branch.health}</span>
+                            </span>
                             <span className="text-neutral-300">•</span>
                             <span className="text-neutral-500">Level {branch.mastery + 1}</span>
                         </div>
@@ -111,7 +124,7 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                 </div>
 
                 {hasChildren && isExpanded && (
-                    <div className="mt-3 space-y-3 relative before:absolute before:left-6 before:top-0 before:bottom-0 before:w-px before:bg-neutral-200/50">
+                    <div className="mt-1 space-y-1 relative before:absolute before:left-6 before:top-0 before:bottom-0 before:w-px before:bg-neutral-200">
                         {branch.children.map((child) => renderBranch(child, depth + 1))}
                     </div>
                 )}
@@ -120,9 +133,9 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
     };
 
     return (
-        <div className="space-y-8 animate-fade-in">
+        <div className="space-y-6 animate-fade-in">
             {/* Header with Health Score */}
-            <div className="glass-panel p-6 rounded-3xl flex items-center justify-between">
+            <div className="bg-white p-6 rounded-2xl border border-neutral-200 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center gap-6">
                     {/* Health Score Circle */}
                     <div className="relative w-24 h-24">
@@ -130,7 +143,7 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                             <circle
                                 cx="48" cy="48" r="40"
                                 fill="none"
-                                stroke="#f3f4f6"
+                                stroke="#f5f5f5"
                                 strokeWidth="8"
                             />
                             <circle
@@ -163,7 +176,7 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                 </div>
 
                 {/* View Toggle */}
-                <div className="glass-panel p-1.5 rounded-xl flex items-center gap-1 bg-neutral-100/50">
+                <div className="p-1.5 rounded-xl flex items-center gap-1 bg-neutral-100 border border-neutral-200">
                     {[
                         { id: 'visual', icon: Target, label: 'Visual' },
                         { id: 'tree', icon: TreePine, label: 'List' },
@@ -173,9 +186,9 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                             key={mode.id}
                             onClick={() => setViewMode(mode.id as any)}
                             className={`
-                                flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all
+                                flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300
                                 ${viewMode === mode.id
-                                    ? 'bg-white text-brand-red shadow-sm transform scale-105'
+                                    ? 'bg-white text-brand-red shadow-sm'
                                     : 'text-neutral-500 hover:text-neutral-900 hover:bg-white/50'
                                 }
                             `}
@@ -190,14 +203,14 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
             {/* Content Area */}
             <div className="min-h-[500px]">
                 {viewMode === 'visual' && (
-                    <div className="glass-panel rounded-3xl p-8 h-[600px] flex items-center justify-center bg-white/50 overflow-hidden relative">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-100/20 to-transparent pointer-events-none" />
+                    <div className="bg-white rounded-2xl p-8 h-[600px] flex items-center justify-center overflow-hidden relative border border-neutral-200 shadow-sm">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-100/30 to-transparent pointer-events-none" />
                         <SkillTreeFlow branches={branches} />
                     </div>
                 )}
 
                 {viewMode === 'tree' && (
-                    <div className="space-y-3 pl-2">
+                    <div className="space-y-1 pl-2">
                         {branches.map((branch) => renderBranch(branch))}
                     </div>
                 )}
@@ -205,16 +218,16 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                 {viewMode === 'analytics' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up">
                         {/* Stats Cards */}
-                        <div className="glass-panel p-8 rounded-3xl flex flex-col justify-center items-center text-center">
-                            <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 shadow-sm">
+                        <div className="bg-white p-8 rounded-2xl border border-neutral-200 shadow-sm flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow duration-300">
+                            <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 border border-emerald-100">
                                 <Activity className="w-8 h-8" />
                             </div>
                             <span className="text-4xl font-black text-neutral-900 mb-2">{healthyCount}</span>
                             <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Healthy Skills</span>
                         </div>
 
-                        <div className="glass-panel p-8 rounded-3xl flex flex-col justify-center items-center text-center">
-                            <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-4 shadow-sm">
+                        <div className="bg-white p-8 rounded-2xl border border-neutral-200 shadow-sm flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow duration-300">
+                            <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-4 border border-amber-100">
                                 <Zap className="w-8 h-8" />
                             </div>
                             <span className="text-4xl font-black text-neutral-900 mb-2">{allSkills.filter((s) => s.mastery === 3).length}</span>

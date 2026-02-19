@@ -1,194 +1,192 @@
-import React, { useState } from 'react';
-import {
-    Check,
-    ChevronRight,
-    Flag,
-    HelpCircle,
-    Sparkles,
-    Play,
-    Clock,
-    ArrowRight,
-    Lock
-} from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface OnboardingCard {
     id: string;
     title: string;
     description: string;
-    icon: React.ReactNode;
-    status: 'LOCKED' | 'AVAILABLE' | 'COMPLETED' | 'IN_PROGRESS';
-    type: 'SETUP' | 'LEARNING' | 'ACTION' | 'CONNECT' | 'REVIEW' | 'CELEBRATION';
-    actionLabel?: string;
-    secondaryActionLabel?: string;
-    onAction?: () => void;
-    onSecondaryAction?: () => void;
-    onMarkComplete?: () => void;
-    progress?: number; // 0-100
+    type: string;
+    status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED' | 'AVAILABLE' | 'LOCKED';
+    progress?: number;
+    estimatedMinutes?: number;
     estimatedTime?: string;
-    explainer?: string; // "Why is this here?"
+    explainer?: string;
+    icon?: React.ReactNode;
+    actionLabel?: string;
+    onAction?: () => void;
 }
 
 interface OnboardingFeedProps {
     cards: OnboardingCard[];
-    onCardAction: (id: string) => void;
+    onCardAction?: (id: string) => void;
 }
 
-const OnboardingFeed: React.FC<OnboardingFeedProps> = ({ cards, onCardAction }) => {
-    const [expandedExplainer, setExpandedExplainer] = useState<string | null>(null);
+const TYPE_CONFIG: Record<string, { label: string; accent: string; accentBg: string; accentBorder: string; dotColor: string }> = {
+    SETUP: { label: 'Setup', accent: 'text-neutral-700', accentBg: 'bg-neutral-50', accentBorder: 'border-neutral-200', dotColor: 'bg-neutral-400' },
+    LEARNING: { label: 'Learning', accent: 'text-blue-600', accentBg: 'bg-blue-50', accentBorder: 'border-blue-100', dotColor: 'bg-blue-500' },
+    ACTION: { label: 'Action', accent: 'text-emerald-600', accentBg: 'bg-emerald-50', accentBorder: 'border-emerald-100', dotColor: 'bg-emerald-500' },
+    CONNECT: { label: 'Connect', accent: 'text-purple-600', accentBg: 'bg-purple-50', accentBorder: 'border-purple-100', dotColor: 'bg-purple-500' },
+    REVIEW: { label: 'Review', accent: 'text-amber-600', accentBg: 'bg-amber-50', accentBorder: 'border-amber-100', dotColor: 'bg-amber-500' },
+    CELEBRATION: { label: 'Celebrate', accent: 'text-yellow-600', accentBg: 'bg-yellow-50', accentBorder: 'border-yellow-100', dotColor: 'bg-yellow-500' },
+};
 
-    const getCardTheme = (type: OnboardingCard['type']) => {
-        switch (type) {
-            case 'SETUP': return { bg: 'bg-white/60', accent: 'text-neutral-600', border: 'border-neutral-200' };
-            case 'LEARNING': return { bg: 'bg-blue-50/40', accent: 'text-blue-600', border: 'border-blue-100' };
-            case 'ACTION': return { bg: 'bg-emerald-50/40', accent: 'text-emerald-600', border: 'border-emerald-100' };
-            case 'CONNECT': return { bg: 'bg-purple-50/40', accent: 'text-purple-600', border: 'border-purple-100' };
-            case 'REVIEW': return { bg: 'bg-amber-50/40', accent: 'text-amber-600', border: 'border-amber-100' };
-            case 'CELEBRATION': return { bg: 'bg-yellow-50/40', accent: 'text-yellow-600', border: 'border-yellow-100' };
-            default: return { bg: 'bg-white', accent: 'text-neutral-900', border: 'border-neutral-200' };
-        }
+// A single horizontal scrolling lane
+const ScrollLane: React.FC<{ cards: OnboardingCard[]; type: string }> = ({ cards, type }) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
+
+    const checkScroll = () => {
+        const el = scrollRef.current;
+        if (!el) return;
+        setCanScrollLeft(el.scrollLeft > 4);
+        setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
     };
+
+    useEffect(() => {
+        checkScroll();
+        const el = scrollRef.current;
+        if (el) el.addEventListener('scroll', checkScroll, { passive: true });
+        window.addEventListener('resize', checkScroll);
+        return () => {
+            el?.removeEventListener('scroll', checkScroll);
+            window.removeEventListener('resize', checkScroll);
+        };
+    }, []);
+
+    const scroll = (direction: 'left' | 'right') => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const scrollAmount = el.clientWidth * 0.7;
+        el.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    };
+
+    const config = TYPE_CONFIG[type] || TYPE_CONFIG.SETUP;
+    const isWide = type === 'SETUP' || type === 'CELEBRATION';
+
+    return (
+        <div className="group/lane relative">
+            {/* Lane header */}
+            <div className="flex items-center gap-3 mb-3 px-1">
+                <div className={`w-2 h-2 rounded-full ${config.dotColor}`} />
+                <h3 className={`text-xs font-bold uppercase tracking-widest ${config.accent}`}>{config.label}</h3>
+                <div className="flex-1 h-px bg-neutral-100" />
+                <span className="text-[10px] font-bold text-neutral-400">{cards.length}</span>
+            </div>
+
+            {/* Scroll container */}
+            <div className="relative">
+                {/* Fade edges */}
+                {canScrollLeft && (
+                    <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-neutral-50 to-transparent z-10 pointer-events-none" />
+                )}
+                {canScrollRight && (
+                    <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-neutral-50 to-transparent z-10 pointer-events-none" />
+                )}
+
+                {/* Scroll arrows */}
+                {canScrollLeft && (
+                    <button
+                        onClick={() => scroll('left')}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white shadow-lg border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-neutral-900 opacity-0 group-hover/lane:opacity-100 transition-all duration-200 hover:scale-110 active:scale-95"
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+                )}
+                {canScrollRight && (
+                    <button
+                        onClick={() => scroll('right')}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white shadow-lg border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-neutral-900 opacity-0 group-hover/lane:opacity-100 transition-all duration-200 hover:scale-110 active:scale-95"
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                )}
+
+                {/* Scrollable rail */}
+                <div
+                    ref={scrollRef}
+                    className="flex gap-4 overflow-x-auto pb-2 scroll-smooth"
+                    style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}
+                >
+                    {cards.map(card => (
+                        <div
+                            key={card.id}
+                            className={`
+                                group flex-shrink-0 scroll-snap-start
+                                ${isWide ? 'w-[360px]' : 'w-[300px]'}
+                            `}
+                            style={{ scrollSnapAlign: 'start' }}
+                        >
+                            <button
+                                onClick={card.onAction}
+                                className={`
+                                    w-full text-left p-5 rounded-2xl border transition-all duration-300
+                                    bg-white hover:shadow-lg hover:-translate-y-1 hover:border-neutral-200 active:scale-[0.98]
+                                    ${card.status === 'COMPLETED'
+                                        ? 'border-neutral-100 opacity-60'
+                                        : `border-neutral-100 shadow-sm`
+                                    }
+                                `}
+                            >
+                                {/* Top accent line */}
+                                <div className={`w-8 h-0.5 rounded-full mb-4 ${config.dotColor} ${card.status === 'IN_PROGRESS' ? 'animate-pulse' : ''}`} />
+
+                                {/* Icon + Meta */}
+                                <div className="flex items-start justify-between mb-3">
+                                    {card.icon && (
+                                        <div className={`w-9 h-9 rounded-xl ${config.accentBg} flex items-center justify-center`}>
+                                            {card.icon}
+                                        </div>
+                                    )}
+                                    <span className="text-[10px] font-bold text-neutral-400">{card.estimatedTime || (card.estimatedMinutes ? `${card.estimatedMinutes}m` : '')}</span>
+                                </div>
+
+                                {/* Title */}
+                                <h4 className={`text-sm font-bold mb-1.5 leading-snug ${card.status === 'COMPLETED' ? 'text-neutral-400 line-through' : 'text-neutral-900'}`}>
+                                    {card.title}
+                                </h4>
+                                <p className="text-xs text-neutral-500 leading-relaxed line-clamp-2 mb-4">{card.description}</p>
+
+                                {/* Progress bar */}
+                                <div className="h-1 bg-neutral-100 rounded-full overflow-hidden">
+                                    <div
+                                        className={`h-full rounded-full transition-all duration-700 ${config.dotColor}`}
+                                        style={{ width: `${card.progress || 0}%` }}
+                                    />
+                                </div>
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const OnboardingFeed: React.FC<OnboardingFeedProps> = ({ cards }) => {
+    // Group cards by type
+    const grouped = cards.reduce((acc, card) => {
+        if (!acc[card.type]) acc[card.type] = [];
+        acc[card.type].push(card);
+        return acc;
+    }, {} as Record<string, OnboardingCard[]>);
+
+    const laneOrder = ['SETUP', 'LEARNING', 'ACTION', 'CONNECT', 'REVIEW', 'CELEBRATION'];
+    const orderedLanes = laneOrder.filter(type => grouped[type]?.length > 0);
+
+    if (orderedLanes.length <= 1) {
+        return (
+            <div>
+                <ScrollLane cards={cards} type={cards[0]?.type || 'SETUP'} />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">
-            {cards.map((card, index) => {
-                const theme = getCardTheme(card.type);
-                const isCompleted = card.status === 'COMPLETED';
-                const isLocked = card.status === 'LOCKED';
-
-                return (
-                    <div
-                        key={card.id}
-                        className={`
-                            relative overflow-hidden rounded-3xl border transition-all duration-500 ease-out
-                            ${isCompleted
-                                ? 'bg-neutral-50 border-neutral-100 opacity-70 grayscale-[0.5]'
-                                : `glass-panel ${theme.border} hover:border-transparent`
-                            }
-                            ${isLocked ? 'opacity-50 pointer-events-none' : 'hover:shadow-[var(--shadow-float)] hover:-translate-y-1'}
-                            animate-fade-in-up
-                        `}
-                        style={{ animationDelay: `${index * 100}ms` }}
-                    >
-                        {/* Status Stripe */}
-                        {!isLocked && !isCompleted && (
-                            <div className={`absolute top-0 left-0 w-1.5 h-full ${theme.accent.replace('text-', 'bg-')} opacity-30`} />
-                        )}
-
-                        <div className="p-6 sm:p-8 pl-8 sm:pl-10">
-                            {/* Header */}
-                            <div className="flex items-start justify-between mb-6">
-                                <div className="flex items-center gap-5">
-                                    {/* Icon Box */}
-                                    <div className={`
-                                        w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm text-2xl
-                                        ${isCompleted ? 'bg-emerald-100 text-emerald-600' : 'bg-white text-neutral-900'}
-                                    `}>
-                                        {isCompleted ? <Check className="w-7 h-7" /> : card.icon}
-                                    </div>
-
-                                    <div>
-                                        <div className="flex items-center gap-3 mb-1">
-                                            <span className={`text-[10px] font-black uppercase tracking-widest ${theme.accent}`}>
-                                                {card.type}
-                                            </span>
-                                            {card.estimatedTime && (
-                                                <span className="flex items-center gap-1 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-100 px-2 py-0.5 rounded-full">
-                                                    <Clock className="w-3 h-3" /> {card.estimatedTime}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <h3 className={`text-xl font-bold leading-tight ${isCompleted ? 'text-neutral-500 line-through' : 'text-neutral-900'}`}>
-                                            {card.title}
-                                        </h3>
-                                    </div>
-                                </div>
-
-                                {/* Context Action */}
-                                {card.explainer && !isCompleted && (
-                                    <button
-                                        onClick={() => setExpandedExplainer(expandedExplainer === card.id ? null : card.id)}
-                                        className="p-2 rounded-full hover:bg-neutral-100 text-neutral-400 hover:text-neutral-900 transition-colors"
-                                    >
-                                        <HelpCircle className="w-5 h-5" />
-                                    </button>
-                                )}
-                            </div>
-
-                            {/* Explainer Panel */}
-                            {expandedExplainer === card.id && (
-                                <div className="mb-6 mx-2 p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-100 shadow-inner animate-slide-down">
-                                    <div className="flex items-start gap-3">
-                                        <Sparkles className="w-4 h-4 text-amber-500 mt-0.5" />
-                                        <p className="text-sm text-neutral-600 font-medium leading-relaxed">
-                                            {card.explainer}
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Description */}
-                            <p className="text-neutral-500 text-[15px] leading-relaxed font-medium mb-6 max-w-2xl">
-                                {card.description}
-                            </p>
-
-                            {/* Progress Bar */}
-                            {typeof card.progress === 'number' && !isCompleted && (
-                                <div className="mb-8 max-w-sm">
-                                    <div className="flex justify-between items-end mb-2">
-                                        <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Progress</span>
-                                        <span className="text-[10px] font-bold text-neutral-900">{card.progress}%</span>
-                                    </div>
-                                    <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
-                                        <div
-                                            className="h-full bg-brand-red transition-all duration-700 ease-in-out"
-                                            style={{ width: `${card.progress}%` }}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Action Area */}
-                            <div className="flex items-center gap-4">
-                                {!isCompleted && !isLocked && (
-                                    <>
-                                        {card.onAction && (
-                                            <button
-                                                onClick={() => card.onAction?.()}
-                                                className="btn-primary py-3 px-8 text-xs flex items-center gap-2 shadow-lg shadow-red-600/20 hover:shadow-red-600/40"
-                                            >
-                                                {card.actionLabel || 'Start'} <ArrowRight className="w-4 h-4" />
-                                            </button>
-                                        )}
-                                        {card.onSecondaryAction && (
-                                            <button
-                                                onClick={() => card.onSecondaryAction?.()}
-                                                className="btn-secondary py-3 px-6 text-xs"
-                                            >
-                                                {card.secondaryActionLabel || 'Skip'}
-                                            </button>
-                                        )}
-                                    </>
-                                )}
-
-                                {isCompleted && (
-                                    <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm bg-emerald-50 px-4 py-2 rounded-full">
-                                        <Check className="w-4 h-4" /> Completed
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Lock Overlay */}
-                        {isLocked && (
-                            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex items-center justify-center">
-                                <div className="bg-white/90 px-6 py-3 rounded-2xl shadow-lg border border-neutral-100 flex items-center gap-3 text-sm font-bold text-neutral-500">
-                                    <Lock className="w-4 h-4" /> Locked Category
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                );
-            })}
+            {orderedLanes.map(type => (
+                <ScrollLane key={type} cards={grouped[type]} type={type} />
+            ))}
         </div>
     );
 };

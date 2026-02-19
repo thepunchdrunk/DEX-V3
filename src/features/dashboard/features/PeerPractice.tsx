@@ -52,7 +52,7 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
             case 'TOOLING': return 'text-[#E65100] bg-[#FFF3E0]';
             case 'WELLBEING': return 'text-[#4CAF50] bg-[#E8F5E9]';
             case 'LEARNING': return 'text-[#F9A825] bg-[#FFF8E1]';
-            default: return 'text-[#616161] bg-gray-100';
+            default: return 'text-neutral-500 bg-gray-100';
         }
     };
 
@@ -71,11 +71,11 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
                         <Users className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-black">Peer Practices</h2>
-                        <p className="text-sm text-[#616161]">Learn from high performers anonymously</p>
+                        <h2 className="text-xl font-bold text-neutral-900">Peer Practices</h2>
+                        <p className="text-sm text-neutral-500">Learn from high performers anonymously</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-[#9E9E9E]">
+                <div className="flex items-center gap-2 text-xs text-neutral-400">
                     <EyeOff className="w-4 h-4" />
                     <span>Anonymized data</span>
                 </div>
@@ -84,18 +84,18 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
             {/* Stats Banner */}
             <div className="grid grid-cols-3 gap-4 p-4 rounded-2xl bg-purple-50 border border-purple-200">
                 <div className="text-center">
-                    <p className="text-2xl font-bold text-black">{insights.length}</p>
-                    <p className="text-xs text-[#616161]">Practices</p>
+                    <p className="text-2xl font-bold text-neutral-900">{insights.length}</p>
+                    <p className="text-xs text-neutral-500">Practices</p>
                 </div>
                 <div className="text-center border-x border-purple-200">
                     <p className="text-2xl font-bold text-[#4CAF50]">
                         {Math.round(insights.reduce((acc, i) => acc + i.adoptionRate, 0) / insights.length)}%
                     </p>
-                    <p className="text-xs text-[#616161]">Avg Adoption</p>
+                    <p className="text-xs text-neutral-500">Avg Adoption</p>
                 </div>
                 <div className="text-center">
                     <p className="text-2xl font-bold text-purple-600">{adoptedPractices.length}</p>
-                    <p className="text-xs text-[#616161]">You've Adopted</p>
+                    <p className="text-xs text-neutral-500">You've Adopted</p>
                 </div>
             </div>
 
@@ -111,7 +111,7 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
                             key={insight.id}
                             className={`rounded-2xl border transition-all ${isAdopted
                                 ? 'bg-[#E8F5E9] border-[#4CAF50]/30'
-                                : 'bg-white border-[#E0E0E0] hover:border-[#E60000]/50 shadow-sm'
+                                : 'bg-white border-neutral-200 hover:border-[#E60000]/50 shadow-sm'
                                 }`}
                         >
                             <div className="p-4">
@@ -124,20 +124,20 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
                                     {/* Content */}
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-medium text-black">{insight.title}</h3>
+                                            <h3 className="font-medium text-neutral-900">{insight.title}</h3>
                                             {isAdopted && (
                                                 <span className="px-2 py-0.5 rounded-full bg-[#E8F5E9] text-[#4CAF50] text-xs">
                                                     Adopted
                                                 </span>
                                             )}
                                         </div>
-                                        <p className="text-sm text-[#616161] mb-3">{insight.description}</p>
+                                        <p className="text-sm text-neutral-500 mb-3">{insight.description}</p>
 
                                         {/* Stats Row */}
                                         <div className="flex items-center gap-4 text-xs">
                                             <div className="flex items-center gap-1.5">
-                                                <Users className="w-3.5 h-3.5 text-[#9E9E9E]" />
-                                                <span className="text-[#616161]">
+                                                <Users className="w-3.5 h-3.5 text-neutral-400" />
+                                                <span className="text-neutral-500">
                                                     {insight.adoptionRate}% peers use this
                                                 </span>
                                             </div>
@@ -169,7 +169,7 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
                                         </button>
                                         <button
                                             onClick={() => setShowDetails(isExpanded ? null : insight.id)}
-                                            className="px-3 py-1.5 rounded-lg text-xs text-[#616161] hover:text-black hover:bg-gray-100 transition-all"
+                                            className="px-3 py-1.5 rounded-lg text-xs text-neutral-500 hover:text-neutral-900 hover:bg-gray-100 transition-all"
                                         >
                                             {isExpanded ? 'Less' : 'More'}
                                         </button>
@@ -179,15 +179,15 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
 
                             {/* Expanded Details */}
                             {isExpanded && (
-                                <div className="px-4 pb-4 pt-2 border-t border-[#E0E0E0]">
+                                <div className="px-4 pb-4 pt-2 border-t border-neutral-200">
                                     <div className="grid md:grid-cols-2 gap-4">
                                         <div>
-                                            <h4 className="text-xs font-medium text-[#9E9E9E] uppercase tracking-wide mb-2">
+                                            <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-wide mb-2">
                                                 How to implement
                                             </h4>
                                             <ul className="space-y-1.5">
                                                 {insight.implementationSteps?.map((step, idx) => (
-                                                    <li key={idx} className="flex items-start gap-2 text-sm text-black">
+                                                    <li key={idx} className="flex items-start gap-2 text-sm text-neutral-900">
                                                         <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs flex-shrink-0">
                                                             {idx + 1}
                                                         </span>
@@ -195,15 +195,15 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
                                                     </li>
                                                 )) || (
                                                         <>
-                                                            <li className="flex items-start gap-2 text-sm text-black">
+                                                            <li className="flex items-start gap-2 text-sm text-neutral-900">
                                                                 <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs flex-shrink-0">1</span>
                                                                 Start with a small commitment
                                                             </li>
-                                                            <li className="flex items-start gap-2 text-sm text-black">
+                                                            <li className="flex items-start gap-2 text-sm text-neutral-900">
                                                                 <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs flex-shrink-0">2</span>
                                                                 Track your progress for 2 weeks
                                                             </li>
-                                                            <li className="flex items-start gap-2 text-sm text-black">
+                                                            <li className="flex items-start gap-2 text-sm text-neutral-900">
                                                                 <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs flex-shrink-0">3</span>
                                                                 Adjust based on results
                                                             </li>
@@ -212,7 +212,7 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
                                             </ul>
                                         </div>
                                         <div>
-                                            <h4 className="text-xs font-medium text-[#9E9E9E] uppercase tracking-wide mb-2">
+                                            <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-wide mb-2">
                                                 Expected benefits
                                             </h4>
                                             <div className="space-y-2">
@@ -235,7 +235,7 @@ const PeerPractice: React.FC<PeerPracticeProps> = ({ className = '' }) => {
             </div>
 
             {/* Privacy Footer */}
-            <div className="flex items-center justify-center gap-2 text-xs text-[#9E9E9E] py-2">
+            <div className="flex items-center justify-center gap-2 text-xs text-neutral-400 py-2">
                 <EyeOff className="w-3.5 h-3.5" />
                 <span>All insights are anonymized aggregates from 50+ peers in similar roles</span>
             </div>

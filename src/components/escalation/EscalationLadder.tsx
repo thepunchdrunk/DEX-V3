@@ -120,12 +120,12 @@ const EscalationLadder: React.FC<EscalationLadderProps> = ({
                             key={path.level}
                             className={`
                 relative p-4 rounded-xl border transition-all duration-200 cursor-pointer
-                ${isSelected ? 'ring-2' : ''}
+                ${isSelected ? '' : ''}
                 ${isRecommended ? 'bg-slate-800/80' : 'bg-slate-800/40'}
               `}
                             style={{
                                 borderColor: isSelected || isRecommended ? `${color}50` : 'rgba(71, 85, 105, 0.5)',
-                                ringColor: isSelected ? color : undefined,
+                                ...(isSelected ? { outlineColor: color, outlineStyle: 'solid', outlineWidth: '2px', outlineOffset: '-2px' } : {}),
                             }}
                             onClick={() => setSelectedLevel(path.level)}
                         >

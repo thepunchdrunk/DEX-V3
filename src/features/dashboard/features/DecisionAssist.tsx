@@ -93,8 +93,8 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
                         <Target className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-black">Decision Assist</h2>
-                        <p className="text-sm text-[#616161]">Prepare for high-stakes scenarios</p>
+                        <h2 className="text-xl font-bold text-neutral-900">Decision Assist</h2>
+                        <p className="text-sm text-neutral-500">Prepare for high-stakes scenarios</p>
                     </div>
                 </div>
 
@@ -104,28 +104,28 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
                         <button
                             key={scenario.id}
                             onClick={() => handleSelectScenario(scenario)}
-                            className="w-full p-4 rounded-xl bg-white border border-[#E0E0E0] hover:border-[#E60000]/50 hover:shadow-md transition-all text-left group"
+                            className="w-full p-4 rounded-xl bg-white border border-neutral-200 hover:border-[#E60000]/50 hover:shadow-md transition-all text-left group"
                         >
                             <div className="flex items-start gap-3">
                                 <span className="text-2xl">{getTypeIcon(scenario.type)}</span>
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2 mb-1">
-                                        <h3 className="font-medium text-black group-hover:text-[#E60000] transition-colors">
+                                        <h3 className="font-medium text-neutral-900 group-hover:text-[#E60000] transition-colors">
                                             {scenario.title}
                                         </h3>
                                         <span className={`px-2 py-0.5 rounded-full text-xs ${getUrgencyColor(scenario.urgency)}`}>
                                             {scenario.urgency}
                                         </span>
                                     </div>
-                                    <p className="text-sm text-[#616161]">{scenario.description}</p>
+                                    <p className="text-sm text-neutral-500">{scenario.description}</p>
                                     {scenario.triggeredBy && (
-                                        <p className="text-xs text-[#9E9E9E] mt-2 flex items-center gap-1">
+                                        <p className="text-xs text-neutral-400 mt-2 flex items-center gap-1">
                                             <AlertCircle className="w-3 h-3" />
                                             {scenario.triggeredBy}
                                         </p>
                                     )}
                                 </div>
-                                <ChevronRight className="w-5 h-5 text-[#9E9E9E] group-hover:text-[#E60000]" />
+                                <ChevronRight className="w-5 h-5 text-neutral-400 group-hover:text-[#E60000]" />
                             </div>
                         </button>
                     ))}
@@ -141,23 +141,23 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
             {!propScenario && (
                 <button
                     onClick={() => setShowScenarioList(true)}
-                    className="text-sm text-[#616161] hover:text-black flex items-center gap-1"
+                    className="text-sm text-neutral-500 hover:text-neutral-900 flex items-center gap-1"
                 >
                     ← Back to scenarios
                 </button>
             )}
 
             {/* Header */}
-            <div className="bg-white rounded-2xl border border-[#E0E0E0] overflow-hidden shadow-sm">
-                <div className="p-5 border-b border-[#E0E0E0]">
+            <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm">
+                <div className="p-5 border-b border-neutral-200">
                     <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
                             <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center">
                                 <Target className="w-6 h-6 text-white" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-black">{selectedScenario.title}</h3>
-                                <p className="text-sm text-[#616161]">{selectedScenario.description}</p>
+                                <h3 className="text-lg font-bold text-neutral-900">{selectedScenario.title}</h3>
+                                <p className="text-sm text-neutral-500">{selectedScenario.description}</p>
                             </div>
                         </div>
                         <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getUrgencyColor(selectedScenario.urgency)}`}>
@@ -167,7 +167,7 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
 
                     {/* Progress Bar */}
                     <div className="mt-4">
-                        <div className="flex items-center justify-between text-xs text-[#616161] mb-1.5">
+                        <div className="flex items-center justify-between text-xs text-neutral-500 mb-1.5">
                             <span>Preparation Progress</span>
                             <span className="font-medium">{completedCount}/{checklist.length}</span>
                         </div>
@@ -181,7 +181,7 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
                 </div>
 
                 {/* Tabs */}
-                <div className="flex border-b border-[#E0E0E0]">
+                <div className="flex border-b border-neutral-200">
                     {[
                         { id: 'checklist', label: 'Checklist', icon: CheckCircle2 },
                         { id: 'framing', label: 'Framing Tools', icon: Lightbulb },
@@ -192,7 +192,7 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
                             onClick={() => setActiveTab(tab.id as any)}
                             className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-all ${activeTab === tab.id
                                 ? 'text-[#E60000] border-b-2 border-[#E60000] bg-[#FFF0F0]'
-                                : 'text-[#616161] hover:text-black'
+                                : 'text-neutral-500 hover:text-neutral-900'
                                 }`}
                         >
                             <tab.icon className="w-4 h-4" />
@@ -213,16 +213,16 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
                                         onClick={() => toggleChecklistItem(item.id)}
                                         className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all text-left ${item.completed
                                             ? 'bg-[#E8F5E9] border border-[#4CAF50]/20'
-                                            : 'bg-[#FAFAFA] hover:bg-gray-100 border border-transparent'
+                                            : 'bg-neutral-50 hover:bg-gray-100 border border-transparent'
                                             }`}
                                     >
                                         {item.completed ? (
                                             <CheckCircle2 className="w-5 h-5 text-[#4CAF50] flex-shrink-0 mt-0.5" />
                                         ) : (
-                                            <Circle className="w-5 h-5 text-[#9E9E9E] flex-shrink-0 mt-0.5" />
+                                            <Circle className="w-5 h-5 text-neutral-400 flex-shrink-0 mt-0.5" />
                                         )}
                                         <div className="flex-1">
-                                            <p className={`text-sm ${item.completed ? 'text-[#9E9E9E] line-through' : 'text-black'}`}>
+                                            <p className={`text-sm ${item.completed ? 'text-neutral-400 line-through' : 'text-neutral-900'}`}>
                                                 {item.text}
                                             </p>
                                             <span className={`text-xs ${categoryStyle.color} mt-1`}>
@@ -240,12 +240,12 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
                             {selectedScenario.framingTools.map((tool, index) => (
                                 <div
                                     key={index}
-                                    className="flex items-start gap-3 p-3 rounded-xl bg-[#FAFAFA] border border-[#E0E0E0]"
+                                    className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 border border-neutral-200"
                                 >
                                     <div className="w-6 h-6 rounded-lg bg-[#FFF3E0] flex items-center justify-center flex-shrink-0">
                                         <Lightbulb className="w-3.5 h-3.5 text-[#E65100]" />
                                     </div>
-                                    <p className="text-sm text-black leading-relaxed">{tool}</p>
+                                    <p className="text-sm text-neutral-900 leading-relaxed">{tool}</p>
                                 </div>
                             ))}
                         </div>
@@ -258,7 +258,7 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
                                     key={index}
                                     className="p-4 rounded-xl bg-purple-50 border border-purple-200"
                                 >
-                                    <p className="text-sm text-black leading-relaxed italic">
+                                    <p className="text-sm text-neutral-900 leading-relaxed italic">
                                         "{prompt}"
                                     </p>
                                 </div>
@@ -268,8 +268,8 @@ const DecisionAssist: React.FC<DecisionAssistProps> = ({
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-[#E0E0E0] bg-[#FAFAFA]">
-                    <button className="w-full py-2.5 rounded-xl bg-[#E60000] hover:bg-[#D32F2F] text-white font-medium text-sm transition-all flex items-center justify-center gap-2">
+                <div className="p-4 border-t border-neutral-200 bg-neutral-50">
+                    <button className="w-full py-2.5 rounded-xl bg-brand-red hover:bg-red-700 text-white font-medium text-sm transition-all flex items-center justify-center gap-2">
                         I'm Prepared
                         <ChevronRight className="w-4 h-4" />
                     </button>
