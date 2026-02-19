@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { UserProfile, OnboardingDay } from '@/types';
-import Day1LifeWorkSetup from './day1/Day1LifeWorkSetup';
-import Day2Culture from './day2/Day2Culture';
-import Day3ToolsWorkflow from './day3/Day3ToolsWorkflow';
-import Day4NetworkCollaboration from './day4/Day4NetworkCollaboration';
-import Day5Graduation from './day5/Day5Graduation';
+import Day1FirstDay from './day1/Day1FirstDay';
+import Day2KnowTheRules from './day2/Day2KnowTheRules';
+import Day3LearnYourRole from './day3/Day3LearnYourRole';
+import Day4BuildNetwork from './day4/Day4BuildNetwork';
+import Day5GoalsLaunch from './day5/Day5GoalsLaunch';
 import {
     Check,
     Lock,
@@ -14,7 +14,6 @@ import {
     Unlock,
     Menu,
     X,
-    Sparkles,
     Zap,
     Shield,
     Users,
@@ -29,11 +28,11 @@ interface OnboardingShellProps {
 }
 
 const DAY_META = [
-    { day: 1, label: 'Life & Work Setup', icon: Rocket, accent: '#E60000', accentBg: 'bg-red-50', accentText: 'text-red-600' },
-    { day: 2, label: 'Culture & Values', icon: Sparkles, accent: '#8B5CF6', accentBg: 'bg-purple-50', accentText: 'text-purple-600' },
-    { day: 3, label: 'Tools & Workflow', icon: Zap, accent: '#3B82F6', accentBg: 'bg-blue-50', accentText: 'text-blue-600' },
-    { day: 4, label: 'Network & Collab', icon: Users, accent: '#10B981', accentBg: 'bg-emerald-50', accentText: 'text-emerald-600' },
-    { day: 5, label: 'Graduation', icon: Award, accent: '#F59E0B', accentBg: 'bg-amber-50', accentText: 'text-amber-600' },
+    { day: 1, label: 'Your First Day', icon: Rocket, accent: '#E60000', accentBg: 'bg-red-50', accentText: 'text-red-600' },
+    { day: 2, label: 'Know the Rules', icon: Shield, accent: '#8B5CF6', accentBg: 'bg-purple-50', accentText: 'text-purple-600' },
+    { day: 3, label: 'Learn Your Role', icon: Zap, accent: '#3B82F6', accentBg: 'bg-blue-50', accentText: 'text-blue-600' },
+    { day: 4, label: 'Build Your Network', icon: Users, accent: '#10B981', accentBg: 'bg-emerald-50', accentText: 'text-emerald-600' },
+    { day: 5, label: 'Goals & Launch', icon: Award, accent: '#F59E0B', accentBg: 'bg-amber-50', accentText: 'text-amber-600' },
 ];
 
 const OnboardingShell: React.FC<OnboardingShellProps> = ({
@@ -85,11 +84,11 @@ const OnboardingShell: React.FC<OnboardingShellProps> = ({
 
     const renderDayContent = () => {
         switch (currentDay) {
-            case 1: return <Day1LifeWorkSetup user={user} onComplete={() => handleDayComplete(1)} />;
-            case 2: return <Day2Culture roleCategory={user.roleCategory || 'DESK'} onComplete={() => handleDayComplete(2)} />;
-            case 3: return <Day3ToolsWorkflow user={user} onComplete={() => handleDayComplete(3)} />;
-            case 4: return <Day4NetworkCollaboration user={user} onComplete={() => handleDayComplete(4)} />;
-            case 5: return <Day5Graduation user={user} onGraduate={onGraduate} />;
+            case 1: return <Day1FirstDay user={user} onComplete={() => handleDayComplete(1)} />;
+            case 2: return <Day2KnowTheRules user={user} onComplete={() => handleDayComplete(2)} />;
+            case 3: return <Day3LearnYourRole user={user} onComplete={() => handleDayComplete(3)} />;
+            case 4: return <Day4BuildNetwork user={user} onComplete={() => handleDayComplete(4)} />;
+            case 5: return <Day5GoalsLaunch user={user} onGraduate={onGraduate} />;
             default: return null;
         }
     };

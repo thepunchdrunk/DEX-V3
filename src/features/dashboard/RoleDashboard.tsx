@@ -21,6 +21,7 @@ import SkillTree from '../tree/SkillTree';
 import MagicSearch from '../search/MagicSearch';
 import InsightsHub from './InsightsHub';
 import { SkillEndorsements, CareerHorizon, PlayerIdentityBadge, AgentDossier, FearlessFeedback } from './features';
+import { EscalationLadder } from '@/components';
 
 type DashboardView = 'DAILY' | 'SKILLS' | 'INSIGHTS' | 'SETTINGS';
 
@@ -271,6 +272,10 @@ const RoleDashboard: React.FC<RoleDashboardProps> = ({ user, isWednesday = false
                         <div className="animate-fade-in-up space-y-8">
                             <InsightsHub />
                             <FearlessFeedback />
+                            <div className="bg-white rounded-3xl border border-neutral-100 shadow-sm p-8">
+                                <h2 className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-6">Escalation Ladder</h2>
+                                <EscalationLadder showAllLevels />
+                            </div>
                         </div>
                     )}
 

@@ -118,13 +118,15 @@ const ScrollLane: React.FC<{ cards: OnboardingCard[]; type: string }> = ({ cards
                             style={{ scrollSnapAlign: 'start' }}
                         >
                             <button
-                                onClick={card.onAction}
+                                onClick={card.status !== 'LOCKED' ? card.onAction : undefined}
+                                disabled={card.status === 'LOCKED'}
                                 className={`
                                     w-full text-left p-5 rounded-2xl border transition-all duration-300
-                                    bg-white hover:shadow-lg hover:-translate-y-1 hover:border-neutral-200 active:scale-[0.98]
-                                    ${card.status === 'COMPLETED'
-                                        ? 'border-neutral-100 opacity-60'
-                                        : `border-neutral-100 shadow-sm`
+                                    ${card.status === 'LOCKED'
+                                        ? 'bg-neutral-50 border-neutral-100 opacity-40 cursor-not-allowed'
+                                        : card.status === 'COMPLETED'
+                                            ? 'bg-white border-neutral-100 opacity-60'
+                                            : 'bg-white border-neutral-100 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-neutral-200 active:scale-[0.98]'
                                     }
                                 `}
                             >
