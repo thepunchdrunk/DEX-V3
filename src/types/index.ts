@@ -34,7 +34,7 @@ export interface UserProfile {
 
   // Privacy Settings
   roleCategory?: 'DESK' | 'FRONTLINE' | 'REMOTE' | 'HYBRID';
-  role: 'EMPLOYEE';
+  role?: 'EMPLOYEE' | 'MANAGER' | null;
 }
 
 export interface DayProgress {

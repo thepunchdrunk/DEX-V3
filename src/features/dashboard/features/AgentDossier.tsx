@@ -16,7 +16,6 @@ import {
 import { UserProfile } from '@/types';
 import { MOCK_BADGES, MOCK_SKILL_TREE } from '@/config/constants';
 import { getPlayerTier, getNextTier, PlayerTier } from './PlayerIdentity';
-import StreakCounter from './StreakCounter';
 import SkillRadar from './charts/SkillRadar';
 
 interface AgentDossierProps {
@@ -152,8 +151,6 @@ const AgentDossier: React.FC<AgentDossierProps> = ({ user }) => {
                             </div>
                         </div>
                     </section>
-
-                    <StreakCounter />
                 </div>
 
                 {/* Column 2: Mastery & Focus */}

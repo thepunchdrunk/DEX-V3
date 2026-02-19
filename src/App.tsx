@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
-  AppState,
   OnboardingDay,
   UserProfile,
 } from '@/types';
-import {
-  MOCK_USER,
-} from '@/config/constants';
+import { useUser } from '@/context/UserContext';
+
+// Import components
 
 // Import components
 import OnboardingShell from './features/onboarding/OnboardingShell';
@@ -18,111 +17,85 @@ import { ToastProvider } from './components/core/ToastProvider';
 // Import styles
 import './styles/design-system.css';
 
-// Storage key for persisting state
-const STORAGE_KEY = 'dex_state';
-
-interface AppPersistedState {
-  appState: AppState;
-  user: UserProfile;
-}
-
 const App: React.FC = () => {
-  // Load persisted state
-  const loadPersistedState = (): AppPersistedState | null => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        return JSON.parse(saved);
-      }
-    } catch (e) {
-      console.error('Failed to load persisted state:', e);
-    }
-    return null;
-  };
-
-  const persistedState = loadPersistedState();
-
-  // App State - Default to ROLE_SELECTION if no persisted state
-  const [appState, setAppState] = useState<AppState>(
-    persistedState?.appState || 'ROLE_SELECTION'
-  );
-  const [user, setUser] = useState<UserProfile>(
-    persistedState?.user || MOCK_USER
-  );
+  const { user, updateUser, isLoading } = useUser();
 
   // Check if today is Wednesday for Simulator
   const isWednesday = new Date().getDay() === 3;
 
-  // Persist state on change
-  useEffect(() => {
-    const state: AppPersistedState = { appState, user };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }, [appState, user]);
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-pulse flex flex-col items-center gap-4">
+          <div className="w-12 h-12 bg-neutral-200 rounded-full"></div>
+          <p className="text-neutral-400 font-medium">Loading DEX...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Handle Role Selection
   const handleRoleSelect = (roleData: Partial<UserProfile>) => {
-    setUser((prev) => ({
-      ...prev,
+    updateUser({
       ...roleData,
-    }));
-    setAppState('ONBOARDING');
+    });
   };
 
   // Handle onboarding day completion
   const handleDayComplete = (day: OnboardingDay) => {
-    setUser((prev) => ({
-      ...prev,
+    updateUser({
       onboardingDay: Math.min(5, day + 1) as OnboardingDay,
       dayProgress: {
-        ...prev.dayProgress,
+        ...user.dayProgress,
         [day]: {
-          ...prev.dayProgress[day],
+          ...user.dayProgress?.[day],
+          day: day,
           completed: true,
           completedAt: new Date().toISOString(),
+          tasks: []
         },
       },
-    }));
+    });
   };
 
   // Handle graduation (transition to Role-Based)
   const handleGraduate = () => {
-    setUser((prev) => ({
-      ...prev,
+    updateUser({
       onboardingComplete: true,
-    }));
-    setAppState('ROLE_BASED');
+    });
   };
 
   // Demo: Unlock all days
   const handleUnlockAll = () => {
-    setUser((prev) => {
-      const newProgress = { ...prev.dayProgress };
-      [1, 2, 3, 4, 5].forEach(day => {
-        if (!newProgress[day as OnboardingDay]) {
-          newProgress[day as OnboardingDay] = {
-            day: day as OnboardingDay,
-            completed: true,
-            completedAt: new Date().toISOString(),
-            tasks: []
-          };
-        } else {
-          newProgress[day as OnboardingDay] = {
-            ...newProgress[day as OnboardingDay],
-            completed: true,
-            completedAt: new Date().toISOString()
-          };
-        }
-      });
-      return {
-        ...prev,
-        onboardingDay: 5 as OnboardingDay,
-        dayProgress: newProgress
-      };
+    const newProgress = { ...user.dayProgress };
+    [1, 2, 3, 4, 5].forEach(day => {
+      // @ts-ignore
+      if (!newProgress[day]) {
+        // @ts-ignore
+        newProgress[day] = {
+          day: day as OnboardingDay,
+          completed: true,
+          completedAt: new Date().toISOString(),
+          tasks: []
+        };
+      } else {
+        // @ts-ignore
+        newProgress[day] = {
+          ...newProgress[day],
+          completed: true,
+          completedAt: new Date().toISOString()
+        };
+      }
+    });
+
+    updateUser({
+      onboardingDay: 5 as OnboardingDay,
+      dayProgress: newProgress
     });
   };
 
   // Render Role Selection
-  if (appState === 'ROLE_SELECTION') {
+  if (!user.role) {
     return (
       <ToastProvider>
         <ErrorBoundary>
@@ -135,7 +108,7 @@ const App: React.FC = () => {
   }
 
   // Render Onboarding Shell
-  if (appState === 'ONBOARDING') {
+  if (!user.onboardingComplete) {
     return (
       <ToastProvider>
         <ErrorBoundary>
@@ -160,7 +133,7 @@ const App: React.FC = () => {
           <RoleDashboard
             user={user}
             isWednesday={isWednesday}
-            onUpdateUser={(updates) => setUser((prev) => ({ ...prev, ...updates }))}
+            onUpdateUser={updateUser}
           />
         </main>
       </ErrorBoundary>

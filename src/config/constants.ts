@@ -42,7 +42,7 @@ export const MOCK_USER: UserProfile = {
     5: { day: 5, completed: false, tasks: [] },
   },
   roleCategory: 'DESK',
-  role: 'EMPLOYEE',
+  role: null,
 };
 
 // ----------------------------------------------------------------------------

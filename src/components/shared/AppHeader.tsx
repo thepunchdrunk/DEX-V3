@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { UserProfile } from '@/types';
 import MagicSearch from '@/features/search/MagicSearch';
-import { MOCK_MARKET_GAP } from '@/config/constants';
 
 type AppMode = 'DASHBOARD' | 'ONBOARDING';
 type DashboardView = 'DAILY' | 'SKILLS' | 'INSIGHTS' | 'ANALYTICS' | 'SETTINGS';
@@ -75,24 +74,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
 
                     <div className="w-px h-6 bg-neutral-100 mx-1 hidden sm:block"></div>
 
-                    {/* Status Monitor */}
-                    <div className="flex items-center gap-2 bg-neutral-50/80 px-3 py-1.5 rounded-xl border border-neutral-100/50">
-                        {mode === 'DASHBOARD' && MOCK_MARKET_GAP && (
-                            <button className="p-1 text-amber-500 hover:scale-110 transition-transform relative" title="Market Gap Alert" aria-label="Market gap alert">
-                                <AlertTriangle className="w-4 h-4" />
-                                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-500 border-2 border-white animate-pulse" />
-                            </button>
-                        )}
-
-                        <button
-                            onClick={onToggleOnline}
-                            className={`p-1 transition-all ${isOnline ? 'text-emerald-500' : 'text-brand-red animate-pulse'}`}
-                            title={isOnline ? 'Connected to Enterprise Core' : 'Offline Mode Active'}
-                            aria-label={isOnline ? 'Online' : 'Offline'}
-                        >
-                            {isOnline ? <Wifi className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
-                        </button>
-                    </div>
+                    {/* Status Monitor (Removed) */}
 
                     {/* User Profile */}
                     <div className="flex items-center gap-3 pl-3 ml-1 border-l border-neutral-100">

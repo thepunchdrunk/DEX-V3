@@ -17,6 +17,7 @@ import {
     BarChart3,
 } from 'lucide-react';
 import { SkillBranch, SkillHealth, SkillMastery } from '@/types';
+import SkillTreeFlow from './SkillTreeFlow';
 
 interface SkillTreeProps {
     branches: SkillBranch[];
@@ -46,12 +47,10 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
 
     const allSkills = useMemo(() => flattenBranches(branches), [branches]);
     const healthyCount = allSkills.filter((s) => s.health === 'THRIVING' || s.health === 'HEALTHY').length;
-    const fadingCount = allSkills.filter((s) => s.health === 'FADING').length;
-    const decayedCount = allSkills.filter((s) => s.health === 'DECAYED').length;
 
     // Calculate overall health score
     const healthScore = useMemo(() => {
-        const weights = { THRIVING: 100, HEALTHY: 80, FADING: 40, DECAYED: 10 };
+        const weights = { THRIVING: 100, HEALTHY: 90, FADING: 80, DECAYED: 70 };
         const totalScore = allSkills.reduce((sum, s) => sum + weights[s.health], 0);
         return Math.round(totalScore / allSkills.length);
     }, [allSkills]);
@@ -63,9 +62,9 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
             case 'HEALTHY':
                 return { bg: 'bg-[#66BB6A]', text: 'text-[#66BB6A]', glow: 'shadow-green-100' };
             case 'FADING':
-                return { bg: 'bg-[#E65100]', text: 'text-[#E65100]', glow: 'shadow-orange-200' };
+                return { bg: 'bg-blue-500', text: 'text-blue-500', glow: 'shadow-blue-200' }; // Repurposed for "Learning"
             case 'DECAYED':
-                return { bg: 'bg-[#D32F2F]', text: 'text-[#D32F2F]', glow: 'shadow-red-200' };
+                return { bg: 'bg-neutral-400', text: 'text-neutral-400', glow: 'shadow-neutral-200' }; // Repurposed for "Pending"
         }
     };
 
@@ -235,42 +234,10 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                         </div>
                     </div>
 
-                    {/* Decay Ring */}
-                    <div className="relative w-10 h-10">
-                        <svg className="w-10 h-10 -rotate-90">
-                            <circle
-                                cx="20"
-                                cy="20"
-                                r="16"
-                                fill="none"
-                                stroke="#E0E0E0"
-                                strokeWidth="3"
-                            />
-                            <circle
-                                cx="20"
-                                cy="20"
-                                r="16"
-                                fill="none"
-                                stroke={decayPercent >= 70 ? '#D32F2F' : decayPercent >= 40 ? '#E65100' : '#4CAF50'}
-                                strokeWidth="3"
-                                strokeDasharray={`${(decayPercent / 100) * 100.5} 100.5`}
-                                strokeLinecap="round"
-                            />
-                        </svg>
-                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-black">
-                            {100 - decayPercent}%
-                        </span>
+                    {/* Simple Progress Ring */}
+                    <div className="relative w-10 h-10 flex items-center justify-center">
+                        <div className={`w-2 h-2 rounded-full ${healthColors.bg}`}></div>
                     </div>
-
-                    {(branch.health === 'FADING' || branch.health === 'DECAYED') && (
-                        <button
-                            onClick={(e) => e.stopPropagation()}
-                            className="px-3 py-1.5 rounded-lg bg-[#FFF3E0] text-[#E65100] text-xs font-medium hover:bg-[#FFE0B2] transition-all flex items-center gap-1"
-                        >
-                            <RefreshCw className="w-3 h-3" />
-                            Verify
-                        </button>
-                    )}
                 </div>
 
                 {hasChildren && isExpanded && (
@@ -303,7 +270,7 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                                 cy="40"
                                 r="34"
                                 fill="none"
-                                stroke={healthScore >= 70 ? '#4CAF50' : healthScore >= 50 ? '#E65100' : '#D32F2F'}
+                                stroke={healthScore >= 70 ? '#4CAF50' : '#60A5FA'}
                                 strokeWidth="6"
                                 strokeDasharray={`${(healthScore / 100) * 213.6} 213.6`}
                                 strokeLinecap="round"
@@ -347,80 +314,7 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
 
             {/* Visual View */}
             {viewMode === 'visual' && (
-                <div className="relative bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-[#E0E0E0] overflow-hidden shadow-sm min-h-[300px] md:min-h-[450px]" style={{ aspectRatio: '16/9' }}>
-                    {/* Background rings */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        {[1, 2, 3].map((ring) => (
-                            <div
-                                key={ring}
-                                className="absolute rounded-full border border-[#E0E0E0]/50"
-                                style={{ width: `${ring * 150}px`, height: `${ring * 150}px` }}
-                            />
-                        ))}
-                    </div>
-
-                    {/* Center node */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                        <div className="w-16 h-16 rounded-full bg-[#E60000] flex items-center justify-center shadow-xl shadow-red-200">
-                            <Award className="w-8 h-8 text-white" />
-                        </div>
-                        <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-center">
-                            <p className="text-sm font-bold text-black">You</p>
-                            <p className="text-xs text-[#E60000]">{allSkills.length} skills</p>
-                        </div>
-                    </div>
-
-                    {/* Skill nodes */}
-                    {branches.map((branch, index) => (
-                        <VisualNode
-                            key={branch.id}
-                            skill={branch}
-                            index={index}
-                            total={branches.length}
-                            level={0}
-                        />
-                    ))}
-
-                    {/* Selected skill detail */}
-                    {selectedSkill && (
-                        <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-white/95 backdrop-blur-md border border-[#E0E0E0] shadow-lg animate-fadeIn z-30">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-10 h-10 rounded-full ${getHealthColor(selectedSkill.health).bg} flex items-center justify-center`}>
-                                        <TreePine className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-bold text-black">{selectedSkill.name}</h3>
-                                        <p className="text-xs text-[#616161]">
-                                            Level {selectedSkill.mastery + 1} • {selectedSkill.health} • {selectedSkill.daysSinceVerified} days since verified
-                                        </p>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => setSelectedSkill(null)}
-                                    className="p-2 rounded-lg hover:bg-gray-100 text-[#616161]"
-                                >
-                                    ✕
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Legend */}
-                    <div className="absolute top-4 left-4 flex flex-col gap-2 text-xs">
-                        {[
-                            { color: 'bg-[#4CAF50]', label: 'Thriving' },
-                            { color: 'bg-[#66BB6A]', label: 'Healthy' },
-                            { color: 'bg-[#E65100]', label: 'Fading' },
-                            { color: 'bg-[#D32F2F]', label: 'Decayed' },
-                        ].map((item) => (
-                            <div key={item.label} className="flex items-center gap-2">
-                                <div className={`w-3 h-3 rounded-full ${item.color}`} />
-                                <span className="text-[#616161]">{item.label}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <SkillTreeFlow branches={branches} />
             )}
 
             {/* Tree View */}
@@ -444,22 +338,13 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                             <p className="text-xs text-[#616161] mt-1">{Math.round((healthyCount / allSkills.length) * 100)}% of skills</p>
                         </div>
 
-                        <div className="bg-[#FFF3E0] rounded-2xl p-4 border border-[#E65100]/20">
+                        <div className="bg-blue-50 rounded-2xl p-4 border border-blue-200">
                             <div className="flex items-center gap-2 mb-2">
-                                <AlertTriangle className="w-5 h-5 text-[#E65100]" />
-                                <span className="text-sm text-[#E65100]">Fading</span>
+                                <Activity className="w-5 h-5 text-blue-600" />
+                                <span className="text-sm text-blue-600">Active</span>
                             </div>
-                            <p className="text-3xl font-bold text-black">{fadingCount}</p>
-                            <p className="text-xs text-[#616161] mt-1">Need attention</p>
-                        </div>
-
-                        <div className="bg-[#FFEBEE] rounded-2xl p-4 border border-[#D32F2F]/20">
-                            <div className="flex items-center gap-2 mb-2">
-                                <TrendingDown className="w-5 h-5 text-[#D32F2F]" />
-                                <span className="text-sm text-[#D32F2F]">Decayed</span>
-                            </div>
-                            <p className="text-3xl font-bold text-black">{decayedCount}</p>
-                            <p className="text-xs text-[#616161] mt-1">Need rebuild</p>
+                            <p className="text-3xl font-bold text-black">{allSkills.length}</p>
+                            <p className="text-xs text-[#616161] mt-1">Total Skills</p>
                         </div>
 
                         <div className="bg-blue-50 rounded-2xl p-4 border border-blue-500/20">
@@ -498,42 +383,7 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                         </div>
                     </div>
 
-                    {/* Decay Timeline */}
-                    <div className="bg-white rounded-2xl p-6 border border-[#E0E0E0] shadow-sm">
-                        <h3 className="text-lg font-bold text-black mb-4">Decay Risk Timeline</h3>
-                        <div className="relative">
-                            <div className="absolute top-4 left-0 right-0 h-1 bg-gradient-to-r from-[#4CAF50] via-[#E65100] to-[#D32F2F] rounded-full opacity-30" />
-                            <div className="flex justify-between text-xs text-[#9E9E9E] mb-8">
-                                <span>Safe</span>
-                                <span>30 days</span>
-                                <span>60 days</span>
-                                <span>90 days</span>
-                            </div>
-                            <div className="space-y-3">
-                                {allSkills
-                                    .sort((a, b) => b.daysSinceVerified - a.daysSinceVerified)
-                                    .slice(0, 5)
-                                    .map((skill) => {
-                                        const position = Math.min(100, (skill.daysSinceVerified / 90) * 100);
-                                        const colors = getHealthColor(skill.health);
-                                        return (
-                                            <div key={skill.id} className="flex items-center gap-4">
-                                                <div className="w-32 text-sm text-[#616161] truncate">{skill.name}</div>
-                                                <div className="flex-1 relative h-2 bg-[#E0E0E0] rounded-full">
-                                                    <div
-                                                        className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full ${colors.bg} shadow-lg ${colors.glow} border-2 border-white`}
-                                                        style={{ left: `calc(${position}% - 8px)` }}
-                                                    />
-                                                </div>
-                                                <div className="w-16 text-xs text-[#9E9E9E] text-right">
-                                                    {skill.daysSinceVerified}d ago
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                            </div>
-                        </div>
-                    </div>
+                    {/* Decay Timeline (Removed) */}
 
                     {/* Mastery Levels */}
                     <div className="bg-white rounded-2xl p-6 border border-[#E0E0E0] shadow-sm">
@@ -563,27 +413,7 @@ const SkillTree: React.FC<SkillTreeProps> = ({ branches }) => {
                 </div>
             )}
 
-            {/* Action Alert */}
-            {fadingCount > 0 && viewMode !== 'analytics' && (
-                <div className="p-4 rounded-2xl bg-[#FFF3E0] border border-[#E65100]/30">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#FFE0B2] flex items-center justify-center">
-                            <Clock className="w-5 h-5 text-[#E65100]" />
-                        </div>
-                        <div className="flex-1">
-                            <p className="font-medium text-black">
-                                {fadingCount} skill{fadingCount > 1 ? 's need' : ' needs'} attention
-                            </p>
-                            <p className="text-sm text-[#616161]">
-                                Verify them before they decay to maintain your expertise
-                            </p>
-                        </div>
-                        <button className="px-4 py-2 rounded-xl bg-[#E65100] hover:bg-[#F57C00] text-white font-medium text-sm transition-all">
-                            Verify Now
-                        </button>
-                    </div>
-                </div>
-            )}
+            {/* Action Alert (Removed) */}
         </div>
     );
 };

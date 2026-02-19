@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import {
-    Flame,
     Check,
     Gamepad2
 } from 'lucide-react';
@@ -100,14 +99,7 @@ const Daily3Feed: React.FC<Daily3FeedProps> = ({
                     </div>
                 </div>
 
-                {/* Streak Counter */}
-                <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 border border-orange-100 rounded-xl text-orange-600">
-                    <Flame className="w-5 h-5 fill-orange-500 streak-fire" />
-                    <div>
-                        <p className="text-[10px] font-bold uppercase tracking-wider leading-none mb-0.5">Stream</p>
-                        <p className="text-sm font-black leading-none">5 Days</p>
-                    </div>
-                </div>
+
             </div>
 
             {/* Cards Grid */}
@@ -138,7 +130,7 @@ const Daily3Feed: React.FC<Daily3FeedProps> = ({
                 )}
             </div>
 
-             {/* Modals (Simulator) */}
+            {/* Modals (Simulator) */}
             {showSimulator && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl p-6 w-full max-w-2xl shadow-xl">

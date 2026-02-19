@@ -7,7 +7,7 @@ export { default as PeerPractice } from './PeerPractice';
 export { default as EnhancedSimulator } from './EnhancedSimulator';
 
 // Elite Learning Features
-export { default as StreakCounter } from './StreakCounter';
+// Elite Learning Features
 export { default as BadgeShowcase } from './BadgeShowcase';
 export { default as Leaderboard } from './Leaderboard';
 export { default as SkillEndorsements } from './SkillEndorsements';

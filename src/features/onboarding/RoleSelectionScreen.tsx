@@ -58,8 +58,8 @@ const RoleSelectionScreen: React.FC<RoleSelectionScreenProps> = ({ onSelectRole 
         onSelectRole({
             jobTitle: role.title,
             department: role.department,
-            roleCategory: role.roleCategory as any,
-            role: role.role as any,
+            roleCategory: role.roleCategory as UserProfile['roleCategory'],
+            role: role.role as UserProfile['role'],
         });
     }, [onSelectRole]);
 

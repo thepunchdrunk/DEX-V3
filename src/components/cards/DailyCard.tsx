@@ -192,14 +192,14 @@ export const DailyCard: React.FC<DailyCardProps> = ({
                             </div>
                         </div>
 
-                        {card.relevanceScore && (
+                        {'relevanceScore' in card && (
                             <div className="bg-white p-3 rounded-lg border border-neutral-100">
                                 <div className="text-[10px] font-bold text-neutral-400 uppercase mb-1">Relevance Score</div>
                                 <div className="flex items-center gap-2">
                                     <div className="h-1.5 flex-1 bg-neutral-100 rounded-full overflow-hidden">
-                                        <div className="h-full bg-brand-red" style={{ width: `${card.relevanceScore}%` }} />
+                                        <div className="h-full bg-brand-red" style={{ width: `${(card as any).relevanceScore}%` }} />
                                     </div>
-                                    <span className="text-xs font-mono font-bold">{card.relevanceScore}%</span>
+                                    <span className="text-xs font-mono font-bold">{(card as any).relevanceScore}%</span>
                                 </div>
                             </div>
                         )}
@@ -219,7 +219,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({
                 {showFlagModal && (
                     <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-white/90 backdrop-blur-sm rounded-2xl">
                         <div className="w-full space-y-2">
-                             <h4 className="font-bold text-sm mb-2 text-center">Report Issue</h4>
+                            <h4 className="font-bold text-sm mb-2 text-center">Report Issue</h4>
                             {['INCORRECT', 'OUTDATED', 'INAPPROPRIATE'].map(r => (
                                 <button
                                     key={r}
