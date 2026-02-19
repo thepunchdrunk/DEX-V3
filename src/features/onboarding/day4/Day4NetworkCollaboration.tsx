@@ -229,7 +229,7 @@ const Day4NetworkCollaboration: React.FC<Day4NetworkCollaborationProps> = ({ use
                 {norms.map(norm => (
                     <div key={norm.id} className="bg-white rounded-2xl border border-neutral-100 p-6">
                         <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 rounded-lg bg-neutral-900 text-white flex items-center justify-center text-sm">
+                            <div className="w-8 h-8 rounded-lg bg-neutral-100 text-neutral-600 flex items-center justify-center text-sm">
                                 {norm.category === 'COMMUNICATION' && '💬'}
                                 {norm.category === 'MEETINGS' && '📅'}
                                 {norm.category === 'FEEDBACK' && '📝'}
@@ -258,9 +258,9 @@ const Day4NetworkCollaboration: React.FC<Day4NetworkCollaborationProps> = ({ use
 
     const renderCohortPhase = () => (
         <div className="space-y-6 animate-fade-in">
-            <div className="bg-neutral-900 rounded-2xl p-6 text-white mb-6">
-                <h4 className="text-2xl font-black mb-1">{cohort.cohortName}</h4>
-                <p className="text-neutral-400 text-sm">Joined {new Date(cohort.startDate).toLocaleDateString()}</p>
+            <div className="glass-panel rounded-2xl p-6 mb-6 border-neutral-200">
+                <h4 className="text-2xl font-black mb-1 text-neutral-900">{cohort.cohortName}</h4>
+                <p className="text-neutral-500 text-sm">Joined {new Date(cohort.startDate).toLocaleDateString()}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

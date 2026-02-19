@@ -307,7 +307,7 @@ const Day2Culture: React.FC<Day2CultureProps> = ({ roleCategory = 'DESK', onComp
             <div className="grid grid-cols-1 gap-4">
                 {MEETING_CULTURE_RULES.map((rule, index) => (
                     <div key={rule.id} className="bg-white p-6 rounded-2xl border border-neutral-100 flex items-start gap-5">
-                        <div className="w-10 h-10 rounded-full bg-neutral-900 text-white flex items-center justify-center font-bold shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-neutral-100 text-neutral-900 flex items-center justify-center font-bold shrink-0">
                             {index + 1}
                         </div>
                         <div>
@@ -408,12 +408,12 @@ const Day2Culture: React.FC<Day2CultureProps> = ({ roleCategory = 'DESK', onComp
 
     const renderBotPhase = () => (
         <div className="space-y-6 animate-fade-in">
-            <div className="bg-neutral-900 rounded-3xl p-6 min-h-[400px] flex flex-col justify-between relative overflow-hidden">
+            <div className="glass-panel rounded-3xl p-6 min-h-[400px] flex flex-col justify-between relative overflow-hidden bg-white/50">
                 <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                    <Sparkles className="w-32 h-32 text-white" />
+                    <Sparkles className="w-32 h-32 text-brand-red" />
                 </div>
 
-                <div className="space-y-4 overflow-y-auto max-h-[300px] pr-2 no-scrollbar">
+                <div className="space-y-4 overflow-y-auto max-h-[300px] pr-2 custom-scrollbar">
                     {botResponses.length === 0 && (
                         <div className="text-center text-neutral-500 mt-20">
                             <p className="text-sm">Ask about dress code, remote work, or anything else.</p>
@@ -422,15 +422,15 @@ const Day2Culture: React.FC<Day2CultureProps> = ({ roleCategory = 'DESK', onComp
                     {botResponses.map((res, i) => (
                         <div key={i} className="space-y-2 animate-slide-up">
                             <div className="flex justify-end">
-                                <div className="bg-brand-red text-white py-2 px-4 rounded-xl rounded-tr-none text-sm font-medium">
+                                <div className="bg-brand-red text-white py-2 px-4 rounded-xl rounded-tr-none text-sm font-medium shadow-sm">
                                     {res.question}
                                 </div>
                             </div>
                             <div className="flex justify-start">
-                                <div className="bg-neutral-800 text-neutral-100 py-3 px-5 rounded-xl rounded-tl-none text-sm leading-relaxed border border-neutral-700 shadow-lg max-w-[90%]">
+                                <div className="bg-white text-neutral-800 py-3 px-5 rounded-xl rounded-tl-none text-sm leading-relaxed border border-neutral-100 shadow-sm max-w-[90%]">
                                     {res.answer}
-                                    <div className="mt-2 pt-2 border-t border-neutral-700 flex items-center justify-between">
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${res.confidenceLevel === 'HIGH' ? 'text-emerald-400' : 'text-amber-400'
+                                    <div className="mt-2 pt-2 border-t border-neutral-100 flex items-center justify-between">
+                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${res.confidenceLevel === 'HIGH' ? 'text-emerald-600' : 'text-amber-600'
                                             }`}>
                                             {res.confidenceLevel} Confidence
                                         </span>
@@ -441,10 +441,10 @@ const Day2Culture: React.FC<Day2CultureProps> = ({ roleCategory = 'DESK', onComp
                     ))}
                     {isTyping && (
                         <div className="flex justify-start">
-                            <div className="bg-neutral-800 py-3 px-5 rounded-xl rounded-tl-none flex gap-1">
-                                <div className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" />
-                                <div className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce delay-75" />
-                                <div className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce delay-150" />
+                            <div className="bg-white py-3 px-5 rounded-xl rounded-tl-none flex gap-1 border border-neutral-100 shadow-sm">
+                                <div className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" />
+                                <div className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce delay-75" />
+                                <div className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce delay-150" />
                             </div>
                         </div>
                     )}
@@ -457,12 +457,12 @@ const Day2Culture: React.FC<Day2CultureProps> = ({ roleCategory = 'DESK', onComp
                         onChange={(e) => setBotQuestion(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleBotSubmit()}
                         placeholder="Ask a question..."
-                        className="w-full bg-neutral-800 border-none rounded-xl py-3 pl-4 pr-12 text-white placeholder-neutral-500 focus:ring-2 focus:ring-brand-red transition-all"
+                        className="w-full bg-white border border-neutral-200 rounded-xl py-3 pl-4 pr-12 text-neutral-900 placeholder-neutral-400 focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all shadow-sm"
                     />
                     <button
                         onClick={handleBotSubmit}
                         disabled={!botQuestion.trim() || isTyping}
-                        className="absolute right-2 top-2 p-1 bg-brand-red rounded-lg text-white hover:bg-opacity-80 transition-colors disabled:opacity-50"
+                        className="absolute right-2 top-2 p-1 bg-brand-red rounded-lg text-white hover:bg-red-600 transition-colors disabled:opacity-50 shadow-sm"
                     >
                         <Send className="w-4 h-4" />
                     </button>
@@ -484,7 +484,7 @@ const Day2Culture: React.FC<Day2CultureProps> = ({ roleCategory = 'DESK', onComp
                 {coffeeChats.map((chat) => (
                     <div key={chat.id} className="bg-white p-6 rounded-2xl border border-neutral-100 shadow-sm relative overflow-hidden group">
                         <div className="flex gap-5 relative z-10">
-                            <div className="w-16 h-16 rounded-xl bg-neutral-900 text-white flex items-center justify-center text-xl font-black shrink-0">
+                            <div className="w-16 h-16 rounded-xl bg-neutral-100 text-neutral-900 flex items-center justify-center text-xl font-black shrink-0">
                                 {chat.personName.split(' ').map(n => n[0]).join('')}
                             </div>
                             <div className="flex-1">

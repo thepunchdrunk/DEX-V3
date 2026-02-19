@@ -203,13 +203,13 @@ const Day3ToolsWorkflow: React.FC<Day3ToolsWorkflowProps> = ({ user, onComplete 
     const renderSimulatorPhase = () => (
         <div className="space-y-8 animate-fade-in">
             {!artifactCreated ? (
-                <div className="bg-neutral-900 rounded-2xl overflow-hidden border border-neutral-800">
-                    <div className="bg-neutral-800/50 p-4 border-b border-neutral-800 flex items-center justify-between">
+                <div className="bg-white rounded-2xl overflow-hidden border border-neutral-200 shadow-sm">
+                    <div className="bg-neutral-50 p-4 border-b border-neutral-200 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Terminal className="w-4 h-4 text-brand-red" />
-                            <span className="text-xs font-bold text-neutral-300 uppercase tracking-widest">{simulation.title}</span>
+                            <span className="text-xs font-bold text-neutral-500 uppercase tracking-widest">{simulation.title}</span>
                         </div>
-                        <span className="text-[10px] bg-brand-red/10 text-brand-red px-2 py-1 rounded">SAFE MODE</span>
+                        <span className="text-[10px] bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-bold">SAFE MODE</span>
                     </div>
 
                     <div className="p-8">
@@ -217,11 +217,11 @@ const Day3ToolsWorkflow: React.FC<Day3ToolsWorkflowProps> = ({ user, onComplete 
                             {simulation.steps.map((step, index) => (
                                 <div key={step.id} className={`flex items-start gap-4 ${index > currentStep ? 'opacity-30' : ''}`}>
                                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 
-                                        ${step.completed ? 'bg-emerald-500 text-white' : (index === currentStep ? 'bg-brand-red text-white animate-pulse' : 'bg-neutral-700 text-neutral-500')}
+                                        ${step.completed ? 'bg-emerald-500 text-white' : (index === currentStep ? 'bg-brand-red text-white animate-pulse' : 'bg-neutral-100 text-neutral-400')}
                                      `}>
                                         {step.completed ? <Check className="w-3 h-3" /> : index + 1}
                                     </div>
-                                    <div className={`text-sm ${index === currentStep ? 'text-white' : 'text-neutral-500'}`}>
+                                    <div className={`text-sm ${index === currentStep ? 'text-neutral-900 font-bold' : 'text-neutral-500'}`}>
                                         {step.instruction}
                                     </div>
                                 </div>
@@ -300,13 +300,13 @@ const Day3ToolsWorkflow: React.FC<Day3ToolsWorkflowProps> = ({ user, onComplete 
     const renderTipsPhase = () => (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
             {tips.map(tip => (
-                <div key={tip.id} className="bg-neutral-900 text-white p-6 rounded-2xl">
+                <div key={tip.id} className="glass-panel p-6 rounded-2xl border-neutral-200">
                     <div className="flex items-center justify-between mb-4">
                         <span className="text-2xl">💡</span>
-                        <kbd className="bg-neutral-800 px-2 py-1 rounded text-xs text-neutral-400 font-mono">{tip.shortcutKey}</kbd>
+                        <kbd className="bg-neutral-100 px-2 py-1 rounded text-xs text-neutral-500 font-mono border border-neutral-200">{tip.shortcutKey}</kbd>
                     </div>
-                    <h4 className="font-bold mb-2">{tip.title}</h4>
-                    <p className="text-sm text-neutral-400">{tip.description}</p>
+                    <h4 className="font-bold mb-2 text-neutral-900">{tip.title}</h4>
+                    <p className="text-sm text-neutral-600">{tip.description}</p>
                 </div>
             ))}
             <button onClick={() => setActivePhase(null)} className="md:col-span-2 btn-secondary py-4 mt-4">Done Reading</button>

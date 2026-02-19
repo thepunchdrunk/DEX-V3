@@ -8,6 +8,7 @@ import {
     Play,
     Clock,
     ArrowRight,
+    Lock
 } from 'lucide-react';
 
 export interface OnboardingCard {
@@ -35,64 +36,22 @@ interface OnboardingFeedProps {
 const OnboardingFeed: React.FC<OnboardingFeedProps> = ({ cards, onCardAction }) => {
     const [expandedExplainer, setExpandedExplainer] = useState<string | null>(null);
 
-    const getCardColors = (type: OnboardingCard['type']) => {
+    const getCardTheme = (type: OnboardingCard['type']) => {
         switch (type) {
-            case 'SETUP': // Administrative / System
-                return {
-                    bg: 'bg-neutral-50/50',
-                    border: 'border-neutral-100 group-hover:border-neutral-300',
-                    text: 'text-neutral-600',
-                    badge: 'bg-neutral-100 text-neutral-700'
-                };
-            case 'LEARNING': // Content consumption
-                return {
-                    bg: 'bg-blue-50/50',
-                    border: 'border-blue-100 group-hover:border-blue-300',
-                    text: 'text-blue-600',
-                    badge: 'bg-blue-100 text-blue-700'
-                };
-            case 'ACTION': // Interactive tasks
-                return {
-                    bg: 'bg-emerald-50/50',
-                    border: 'border-emerald-100 group-hover:border-emerald-300',
-                    text: 'text-emerald-600',
-                    badge: 'bg-emerald-100 text-emerald-700'
-                };
-            case 'CONNECT': // People / Social
-                return {
-                    bg: 'bg-purple-50/50',
-                    border: 'border-purple-100 group-hover:border-purple-300',
-                    text: 'text-purple-600',
-                    badge: 'bg-purple-100 text-purple-700'
-                };
-            case 'REVIEW': // Exams / Checks
-                return {
-                    bg: 'bg-amber-50/50',
-                    border: 'border-amber-100 group-hover:border-amber-300',
-                    text: 'text-amber-600',
-                    badge: 'bg-amber-100 text-amber-700'
-                };
-            case 'CELEBRATION': // Graduation / Success
-                return {
-                    bg: 'bg-yellow-50/50',
-                    border: 'border-yellow-100 group-hover:border-yellow-300',
-                    text: 'text-yellow-600',
-                    badge: 'bg-yellow-100 text-yellow-700'
-                };
-            default:
-                return {
-                    bg: 'bg-white',
-                    border: 'border-neutral-200',
-                    text: 'text-neutral-900',
-                    badge: 'bg-neutral-100 text-neutral-900'
-                };
+            case 'SETUP': return { bg: 'bg-white/60', accent: 'text-neutral-600', border: 'border-neutral-200' };
+            case 'LEARNING': return { bg: 'bg-blue-50/40', accent: 'text-blue-600', border: 'border-blue-100' };
+            case 'ACTION': return { bg: 'bg-emerald-50/40', accent: 'text-emerald-600', border: 'border-emerald-100' };
+            case 'CONNECT': return { bg: 'bg-purple-50/40', accent: 'text-purple-600', border: 'border-purple-100' };
+            case 'REVIEW': return { bg: 'bg-amber-50/40', accent: 'text-amber-600', border: 'border-amber-100' };
+            case 'CELEBRATION': return { bg: 'bg-yellow-50/40', accent: 'text-yellow-600', border: 'border-yellow-100' };
+            default: return { bg: 'bg-white', accent: 'text-neutral-900', border: 'border-neutral-200' };
         }
     };
 
     return (
-        <div className="space-y-5">
+        <div className="space-y-6">
             {cards.map((card, index) => {
-                const colors = getCardColors(card.type);
+                const theme = getCardTheme(card.type);
                 const isCompleted = card.status === 'COMPLETED';
                 const isLocked = card.status === 'LOCKED';
 
@@ -100,130 +59,120 @@ const OnboardingFeed: React.FC<OnboardingFeedProps> = ({ cards, onCardAction }) 
                     <div
                         key={card.id}
                         className={`
-                            group relative backdrop-blur-md rounded-2xl border transition-all duration-500
-                            ${colors.bg} ${colors.border}
+                            relative overflow-hidden rounded-3xl border transition-all duration-500 ease-out
                             ${isCompleted
-                                ? 'opacity-60 scale-[0.99] grayscale-[0.5]'
-                                : isLocked
-                                    ? 'opacity-40 pointer-events-none'
-                                    : 'hover:-translate-y-1 hover:shadow-xl shadow-sm animate-slide-up'}
+                                ? 'bg-neutral-50 border-neutral-100 opacity-70 grayscale-[0.5]'
+                                : `glass-panel ${theme.border} hover:border-transparent`
+                            }
+                            ${isLocked ? 'opacity-50 pointer-events-none' : 'hover:shadow-[var(--shadow-float)] hover:-translate-y-1'}
+                            animate-fade-in-up
                         `}
                         style={{ animationDelay: `${index * 100}ms` }}
                     >
                         {/* Status Stripe */}
                         {!isLocked && !isCompleted && (
-                            <div className={`h-1.5 w-full absolute top-0 left-0 ${colors.text.replace('text-', 'bg-')} opacity-20 rounded-t-2xl`} />
+                            <div className={`absolute top-0 left-0 w-1.5 h-full ${theme.accent.replace('text-', 'bg-')} opacity-30`} />
                         )}
 
-                        <div className="p-6">
-                            {/* Card Header */}
-                            <div className="flex items-center justify-between mb-5">
-                                <div className="flex items-center gap-4">
+                        <div className="p-6 sm:p-8 pl-8 sm:pl-10">
+                            {/* Header */}
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="flex items-center gap-5">
+                                    {/* Icon Box */}
                                     <div className={`
-                                        w-12 h-12 rounded-xl flex items-center justify-center shadow-sm transition-transform
-                                        ${isCompleted ? 'bg-emerald-100 text-emerald-600' : colors.badge}
+                                        w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm text-2xl
+                                        ${isCompleted ? 'bg-emerald-100 text-emerald-600' : 'bg-white text-neutral-900'}
                                     `}>
-                                        {isCompleted ? <Check className="w-6 h-6" /> : card.icon}
+                                        {isCompleted ? <Check className="w-7 h-7" /> : card.icon}
                                     </div>
+
                                     <div>
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${colors.text}`}>
-                                            {card.type} MODULE
-                                        </span>
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-3 mb-1">
+                                            <span className={`text-[10px] font-black uppercase tracking-widest ${theme.accent}`}>
+                                                {card.type}
+                                            </span>
                                             {card.estimatedTime && (
-                                                <span className="flex items-center gap-1 text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
+                                                <span className="flex items-center gap-1 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-100 px-2 py-0.5 rounded-full">
                                                     <Clock className="w-3 h-3" /> {card.estimatedTime}
                                                 </span>
                                             )}
                                         </div>
+                                        <h3 className={`text-xl font-bold leading-tight ${isCompleted ? 'text-neutral-500 line-through' : 'text-neutral-900'}`}>
+                                            {card.title}
+                                        </h3>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-2">
-                                    {card.explainer && (
-                                        <button
-                                            onClick={() => setExpandedExplainer(expandedExplainer === card.id ? null : card.id)}
-                                            className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-400 hover:text-neutral-900 transition-colors"
-                                            title="About this module"
-                                        >
-                                            <HelpCircle className="w-4 h-4" />
-                                        </button>
-                                    )}
-                                </div>
+                                {/* Context Action */}
+                                {card.explainer && !isCompleted && (
+                                    <button
+                                        onClick={() => setExpandedExplainer(expandedExplainer === card.id ? null : card.id)}
+                                        className="p-2 rounded-full hover:bg-neutral-100 text-neutral-400 hover:text-neutral-900 transition-colors"
+                                    >
+                                        <HelpCircle className="w-5 h-5" />
+                                    </button>
+                                )}
                             </div>
 
                             {/* Explainer Panel */}
                             {expandedExplainer === card.id && (
-                                <div className="mb-5 p-4 rounded-xl bg-white/50 border border-neutral-100 animate-slide-down">
+                                <div className="mb-6 mx-2 p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-100 shadow-inner animate-slide-down">
                                     <div className="flex items-start gap-3">
-                                        <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 mt-0.5">
-                                            <Sparkles className={`w-3.5 h-3.5 ${colors.text}`} />
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-bold text-neutral-900 uppercase tracking-tighter mb-1">
-                                                Context
-                                            </p>
-                                            <p className="text-sm text-neutral-600 leading-relaxed font-medium">
-                                                {card.explainer}
-                                            </p>
-                                        </div>
+                                        <Sparkles className="w-4 h-4 text-amber-500 mt-0.5" />
+                                        <p className="text-sm text-neutral-600 font-medium leading-relaxed">
+                                            {card.explainer}
+                                        </p>
                                     </div>
                                 </div>
                             )}
 
-                            {/* Main Content */}
-                            <div className="mb-6">
-                                <h3 className={`text-xl font-bold mb-2 leading-tight transition-colors ${isCompleted ? 'text-neutral-500 line-through' : 'text-neutral-900 group-hover:text-brand-red'}`}>
-                                    {card.title}
-                                </h3>
-                                <p className="text-neutral-600 text-[15px] leading-relaxed font-medium">
-                                    {card.description}
-                                </p>
-                            </div>
+                            {/* Description */}
+                            <p className="text-neutral-500 text-[15px] leading-relaxed font-medium mb-6 max-w-2xl">
+                                {card.description}
+                            </p>
 
-                            {/* Progress Bar (if applicable) */}
+                            {/* Progress Bar */}
                             {typeof card.progress === 'number' && !isCompleted && (
-                                <div className="mb-6">
-                                    <div className="flex justify-between items-end mb-1">
+                                <div className="mb-8 max-w-sm">
+                                    <div className="flex justify-between items-end mb-2">
                                         <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Progress</span>
-                                        <span className="text-[10px] font-bold text-brand-red">{card.progress}%</span>
+                                        <span className="text-[10px] font-bold text-neutral-900">{card.progress}%</span>
                                     </div>
-                                    <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                                    <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-brand-red transition-all duration-500"
+                                            className="h-full bg-brand-red transition-all duration-700 ease-in-out"
                                             style={{ width: `${card.progress}%` }}
                                         />
                                     </div>
                                 </div>
                             )}
 
-                            {/* Actions */}
-                            <div className="flex items-center gap-3">
+                            {/* Action Area */}
+                            <div className="flex items-center gap-4">
                                 {!isCompleted && !isLocked && (
                                     <>
                                         {card.onAction && (
                                             <button
                                                 onClick={() => card.onAction?.()}
-                                                className="flex-1 py-3 px-6 bg-brand-red hover:bg-red-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-red active:scale-95 translate-y-0 hover:-translate-y-0.5"
+                                                className="btn-primary py-3 px-8 text-xs flex items-center gap-2 shadow-lg shadow-red-600/20 hover:shadow-red-600/40"
                                             >
-                                                {card.actionLabel || 'Start Module'}
-                                                <ArrowRight className="w-4 h-4" />
+                                                {card.actionLabel || 'Start'} <ArrowRight className="w-4 h-4" />
                                             </button>
                                         )}
                                         {card.onSecondaryAction && (
                                             <button
                                                 onClick={() => card.onSecondaryAction?.()}
-                                                className="py-3 px-6 bg-white hover:bg-neutral-50 text-neutral-600 font-bold rounded-xl border border-neutral-200 transition-all active:scale-95"
+                                                className="btn-secondary py-3 px-6 text-xs"
                                             >
-                                                {card.secondaryActionLabel || 'Options'}
+                                                {card.secondaryActionLabel || 'Skip'}
                                             </button>
                                         )}
                                     </>
                                 )}
 
                                 {isCompleted && (
-                                    <div className="flex items-center gap-2 px-4 py-3 bg-emerald-50 text-emerald-600 text-xs font-bold uppercase tracking-widest rounded-xl border border-emerald-100 w-full justify-center">
-                                        <Check className="w-4 h-4" /> Module Complete
+                                    <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm bg-emerald-50 px-4 py-2 rounded-full">
+                                        <Check className="w-4 h-4" /> Completed
                                     </div>
                                 )}
                             </div>
@@ -231,9 +180,9 @@ const OnboardingFeed: React.FC<OnboardingFeedProps> = ({ cards, onCardAction }) 
 
                         {/* Lock Overlay */}
                         {isLocked && (
-                            <div className="absolute inset-0 bg-neutral-50/50 backdrop-blur-[1px] rounded-2xl flex items-center justify-center">
-                                <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-neutral-200 text-xs font-bold text-neutral-400 uppercase tracking-widest flex items-center gap-2">
-                                    Complete Previous Steps to Unlock
+                            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex items-center justify-center">
+                                <div className="bg-white/90 px-6 py-3 rounded-2xl shadow-lg border border-neutral-100 flex items-center gap-3 text-sm font-bold text-neutral-500">
+                                    <Lock className="w-4 h-4" /> Locked Category
                                 </div>
                             </div>
                         )}

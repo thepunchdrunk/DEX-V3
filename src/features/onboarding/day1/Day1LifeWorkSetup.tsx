@@ -402,10 +402,12 @@ const Day1LifeWorkSetup: React.FC<Day1LifeWorkSetupProps> = ({
 
     const renderPrivacyModule = () => (
         <div className="space-y-8">
-            <div className="bg-neutral-900 rounded-2xl p-6 text-white text-center">
-                <Shield className="w-12 h-12 mx-auto mb-4 text-brand-red" />
-                <h4 className="text-lg font-bold mb-2">Data Sovereignty</h4>
-                <p className="text-sm text-neutral-400 max-w-md mx-auto">
+            <div className="glass-panel rounded-2xl p-8 text-center border-neutral-200">
+                <div className="w-16 h-16 rounded-full bg-brand-red/5 flex items-center justify-center mx-auto mb-4">
+                    <Shield className="w-8 h-8 text-brand-red" />
+                </div>
+                <h4 className="text-xl font-black text-neutral-900 mb-2 tracking-tight">Data Sovereignty</h4>
+                <p className="text-sm font-medium text-neutral-500 max-w-md mx-auto leading-relaxed">
                     Your data is used solely to optimize your onboarding and work experience.
                     We do not sell or share your personal performance metrics with third parties.
                 </p>
@@ -482,7 +484,7 @@ const Day1LifeWorkSetup: React.FC<Day1LifeWorkSetupProps> = ({
                     <p className="text-neutral-500 text-lg">{description}</p>
                 </div>
 
-                <div className="bg-white rounded-3xl border border-neutral-100 shadow-xl shadow-neutral-100/50 p-8">
+                <div className="glass-panel rounded-3xl p-8">
                     {content}
                 </div>
             </div>
