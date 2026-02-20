@@ -19,6 +19,7 @@ import {
 import { UserProfile } from '@/types';
 import { getRoleIdFromProfile, getRoleConfig, CULTURE_QUIZ_QUESTIONS } from '@/config/onboardingRoleConfigs';
 import OnboardingFeed, { OnboardingCard } from '../shared/OnboardingFeed';
+import { PhaseCard, CompleteButton } from '../shared/OnboardingUI';
 
 interface Day4Props {
     user: UserProfile;
@@ -219,10 +220,10 @@ const Day4BuildNetwork: React.FC<Day4Props> = ({ user, onComplete }) => {
                                             key={ci}
                                             onClick={() => setSelectedChoice(ci)}
                                             className={`w-full text-left p-3 rounded-xl border transition-all ${selectedChoice === ci
-                                                    ? c.isRight
-                                                        ? 'bg-green-50 border-green-300'
-                                                        : 'bg-red-50 border-red-300'
-                                                    : 'bg-neutral-50 border-neutral-100 hover:bg-neutral-100'
+                                                ? c.isRight
+                                                    ? 'bg-green-50 border-green-300'
+                                                    : 'bg-red-50 border-red-300'
+                                                : 'bg-neutral-50 border-neutral-100 hover:bg-neutral-100'
                                                 }`}
                                         >
                                             <p className="text-sm text-neutral-800">{c.text}</p>
@@ -324,12 +325,12 @@ const Day4BuildNetwork: React.FC<Day4Props> = ({ user, onComplete }) => {
                                                 }
                                             }}
                                             className={`w-full text-left p-3 rounded-xl border transition-all text-sm ${quizAnswer === null
-                                                    ? 'bg-neutral-50 border-neutral-100 hover:bg-neutral-100'
-                                                    : oi === CULTURE_QUIZ_QUESTIONS[quizIndex].correctIndex
-                                                        ? 'bg-green-50 border-green-300'
-                                                        : quizAnswer === oi
-                                                            ? 'bg-red-50 border-red-300'
-                                                            : 'bg-neutral-50 border-neutral-100 opacity-50'
+                                                ? 'bg-neutral-50 border-neutral-100 hover:bg-neutral-100'
+                                                : oi === CULTURE_QUIZ_QUESTIONS[quizIndex].correctIndex
+                                                    ? 'bg-green-50 border-green-300'
+                                                    : quizAnswer === oi
+                                                        ? 'bg-red-50 border-red-300'
+                                                        : 'bg-neutral-50 border-neutral-100 opacity-50'
                                                 }`}
                                         >
                                             {opt}
@@ -441,18 +442,6 @@ const Day4BuildNetwork: React.FC<Day4Props> = ({ user, onComplete }) => {
     );
 };
 
-// --- Shared ---
-
-const PhaseCard: React.FC<{ title: string; icon: React.ReactNode; children: React.ReactNode }> = ({ title, icon, children }) => (
-    <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-        <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 rounded-xl bg-neutral-50 flex items-center justify-center">{icon}</div>
-            <h3 className="text-lg font-black text-neutral-900">{title}</h3>
-        </div>
-        {children}
-    </div>
-);
-
 const KeyPersonCard: React.FC<{ person: { name: string; title: string; why: string; intro: string }; index: number }> = ({ person, index }) => {
     const [sent, setSent] = useState(false);
     const colors = ['bg-red-100 text-red-600', 'bg-blue-100 text-blue-600', 'bg-green-100 text-green-600', 'bg-purple-100 text-purple-600', 'bg-amber-100 text-amber-600'];
@@ -474,8 +463,8 @@ const KeyPersonCard: React.FC<{ person: { name: string; title: string; why: stri
             <button
                 onClick={() => setSent(true)}
                 className={`mt-2 w-full py-2 text-xs font-bold rounded-lg transition-all ${sent
-                        ? 'bg-green-100 text-green-700 cursor-default'
-                        : 'bg-emerald-500 text-white hover:bg-emerald-600 active:scale-[0.98]'
+                    ? 'bg-green-100 text-green-700 cursor-default'
+                    : 'bg-emerald-500 text-white hover:bg-emerald-600 active:scale-[0.98]'
                     }`}
             >
                 {sent ? '✓ Intro Sent' : 'Send Intro'} {!sent && <Send className="w-3 h-3 inline ml-1" />}
@@ -503,14 +492,5 @@ const MeetingItem: React.FC<{ meeting: { name: string; frequency: string; what: 
         </div>
     );
 };
-
-const CompleteButton: React.FC<{ onClick: () => void; label?: string }> = ({ onClick, label = 'Mark Complete' }) => (
-    <button
-        onClick={onClick}
-        className="mt-6 w-full py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-bold rounded-xl hover:shadow-lg hover:shadow-emerald-500/20 transition-all active:scale-[0.98]"
-    >
-        {label} <ChevronRight className="w-4 h-4 inline ml-1" />
-    </button>
-);
 
 export default Day4BuildNetwork;

@@ -12,11 +12,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\""
   },
   "dependencies": {
-    "@google/genai": "^1.38.0",
-    "@google/generative-ai": "^0.24.1",
     "@xyflow/react": "^12.10.0",
     "d3": "^7.9.0",
-    "framer-motion": "^12.34.2",
     "lucide-react": "^0.563.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

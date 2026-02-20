@@ -1,0 +1,15 @@
+﻿Unused dependencies
+* @google/genai
+* @google/generative-ai
+* framer-motion
+Unused devDependencies
+* @tailwindcss/postcss
+* autoprefixer
+* cors
+* dotenv
+* eslint-plugin-react
+* express
+* postcss
+* tailwindcss
+Missing dependencies
+* eslint-plugin-react-refresh: .\.eslintrc.cjs

@@ -29,6 +29,7 @@ import {
     UNIVERSAL_HANDBOOK,
 } from '@/config/onboardingRoleConfigs';
 import OnboardingFeed, { OnboardingCard } from '../shared/OnboardingFeed';
+import { PhaseCard, CompleteButton } from '../shared/OnboardingUI';
 
 interface Day2Props {
     user: UserProfile;
@@ -346,18 +347,6 @@ const Day2KnowTheRules: React.FC<Day2Props> = ({ user, onComplete }) => {
     );
 };
 
-// --- Shared ---
-
-const PhaseCard: React.FC<{ title: string; icon: React.ReactNode; children: React.ReactNode }> = ({ title, icon, children }) => (
-    <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-        <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 rounded-xl bg-neutral-50 flex items-center justify-center">{icon}</div>
-            <h3 className="text-lg font-black text-neutral-900">{title}</h3>
-        </div>
-        {children}
-    </div>
-);
-
 const PolicyItem: React.FC<{ title: string; description: string; category: string; highlight?: boolean }> = ({ title, description, category, highlight }) => (
     <div className={`p-3 rounded-xl border ${highlight ? 'bg-blue-50 border-blue-100' : 'bg-neutral-50 border-neutral-100'}`}>
         <div className="flex items-center justify-between mb-1">
@@ -366,15 +355,6 @@ const PolicyItem: React.FC<{ title: string; description: string; category: strin
         </div>
         <p className={`text-xs ${highlight ? 'text-blue-700' : 'text-neutral-500'}`}>{description}</p>
     </div>
-);
-
-const CompleteButton: React.FC<{ onClick: () => void; label?: string }> = ({ onClick, label = 'Mark Complete' }) => (
-    <button
-        onClick={onClick}
-        className="mt-6 w-full py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-bold rounded-xl hover:shadow-lg hover:shadow-purple-500/20 transition-all active:scale-[0.98]"
-    >
-        {label} <ChevronRight className="w-4 h-4 inline ml-1" />
-    </button>
 );
 
 export default Day2KnowTheRules;

@@ -473,7 +473,7 @@ export const MOCK_SIMULATOR: SimulatorChallenge = {
 
 // Expected: [4, 5]
 // Actual: [3, 4, 5]
-console.log(getLastN([1,2,3,4,5], 2));`,
+`,
     bugLine: 4,
     bugDescription:
       'Off-by-one error in slice. Should be `arr.slice(arr.length - n)` not `arr.slice(arr.length - n - 1)`',

@@ -20,6 +20,7 @@ import {
 import { UserProfile } from '@/types';
 import { getRoleIdFromProfile, getRoleConfig } from '@/config/onboardingRoleConfigs';
 import OnboardingFeed, { OnboardingCard } from '../shared/OnboardingFeed';
+import { PhaseCard, CompleteButton, ChecklistModule } from '../shared/OnboardingUI';
 
 interface Day5Props {
     user: UserProfile;
@@ -196,11 +197,11 @@ const Day5GoalsLaunch: React.FC<Day5Props> = ({ user, onGraduate }) => {
                     <PhaseCard title="Manager Sign-off" icon={<Award className="w-6 h-6 text-emerald-500" />}>
                         <p className="text-sm text-neutral-600 mb-4">Schedule a 30-minute 1:1 with {user.manager || 'your manager'} today to:</p>
                         <ChecklistModule items={[
-                            { label: 'Review your 30/60/90 day goals together' },
-                            { label: 'Confirm expectations for the first month' },
-                            { label: 'Address any questions from the week' },
-                            { label: 'Get feedback on how your first week went' },
-                            { label: 'Schedule recurring 1:1 (weekly recommended)' },
+                            { label: 'Review your 30/60/90 day goals together', done: false },
+                            { label: 'Confirm expectations for the first month', done: false },
+                            { label: 'Address any questions from the week', done: false },
+                            { label: 'Get feedback on how your first week went', done: false },
+                            { label: 'Schedule recurring 1:1 (weekly recommended)', done: false },
                         ]} />
                         <CompleteButton onClick={() => markComplete('MANAGER_SIGNOFF')} label="Sign-off complete" />
                     </PhaseCard>
@@ -322,7 +323,7 @@ const Day5GoalsLaunch: React.FC<Day5Props> = ({ user, onGraduate }) => {
                                 onClick={() => { setGraduated(true); onGraduate(); }}
                                 className="w-full py-4 bg-gradient-to-r from-red-500 via-red-600 to-red-500 text-white text-lg font-black rounded-xl hover:shadow-xl hover:shadow-red-500/30 transition-all active:scale-[0.98] relative overflow-hidden"
                             >
-                                <span className="relative z-10">Launch Into Your Career 🚀</span>
+                                <span className="relative z-10">Launch Workplace 🚀</span>
                             </button>
                         </div>
                     </PhaseCard>
@@ -350,16 +351,6 @@ const Day5GoalsLaunch: React.FC<Day5Props> = ({ user, onGraduate }) => {
 
 // --- Shared ---
 
-const PhaseCard: React.FC<{ title: string; icon: React.ReactNode; children: React.ReactNode }> = ({ title, icon, children }) => (
-    <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-        <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 rounded-xl bg-neutral-50 flex items-center justify-center">{icon}</div>
-            <h3 className="text-lg font-black text-neutral-900">{title}</h3>
-        </div>
-        {children}
-    </div>
-);
-
 const GoalSection: React.FC<{ title: string; color: string; goals: string[]; icon: string }> = ({ title, color, goals, icon }) => (
     <div className="mb-5">
         <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">{icon} {title}</h4>
@@ -372,33 +363,6 @@ const GoalSection: React.FC<{ title: string; color: string; goals: string[]; ico
         </div>
     </div>
 );
-
-const ChecklistModule: React.FC<{ items: { label: string }[] }> = ({ items: initialItems }) => {
-    const [checked, setChecked] = useState<boolean[]>(initialItems.map(() => false));
-    const toggle = (i: number) => {
-        const updated = [...checked];
-        updated[i] = !updated[i];
-        setChecked(updated);
-    };
-    return (
-        <div className="space-y-2">
-            {initialItems.map((item, i) => (
-                <button
-                    key={i}
-                    onClick={() => toggle(i)}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left ${checked[i] ? 'bg-green-50 border-green-200 opacity-70' : 'bg-neutral-50 border-neutral-100 hover:bg-neutral-100'
-                        }`}
-                >
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${checked[i] ? 'border-green-500 bg-green-500' : 'border-neutral-300'
-                        }`}>
-                        {checked[i] && <CheckCircle2 className="w-3 h-3 text-white" />}
-                    </div>
-                    <span className={`text-sm ${checked[i] ? 'line-through text-neutral-400' : 'text-neutral-700'}`}>{item.label}</span>
-                </button>
-            ))}
-        </div>
-    );
-};
 
 const ERGItem: React.FC<{ group: { name: string; emoji: string; desc: string } }> = ({ group }) => {
     const [joined, setJoined] = useState(false);
@@ -423,14 +387,5 @@ const ERGItem: React.FC<{ group: { name: string; emoji: string; desc: string } }
         </div>
     );
 };
-
-const CompleteButton: React.FC<{ onClick: () => void; label?: string }> = ({ onClick, label = 'Mark Complete' }) => (
-    <button
-        onClick={onClick}
-        className="mt-6 w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-sm font-bold rounded-xl hover:shadow-lg hover:shadow-amber-500/20 transition-all active:scale-[0.98]"
-    >
-        {label} <ChevronRight className="w-4 h-4 inline ml-1" />
-    </button>
-);
 
 export default Day5GoalsLaunch;

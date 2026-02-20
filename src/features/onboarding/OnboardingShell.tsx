@@ -5,6 +5,7 @@ import Day2KnowTheRules from './day2/Day2KnowTheRules';
 import Day3LearnYourRole from './day3/Day3LearnYourRole';
 import Day4BuildNetwork from './day4/Day4BuildNetwork';
 import Day5GoalsLaunch from './day5/Day5GoalsLaunch';
+import GraduationCeremony from './GraduationCeremony';
 import {
     Check,
     Lock,
@@ -45,6 +46,7 @@ const OnboardingShell: React.FC<OnboardingShellProps> = ({
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [transitionDirection, setTransitionDirection] = useState<'forward' | 'backward'>('forward');
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isGraduating, setIsGraduating] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -88,12 +90,12 @@ const OnboardingShell: React.FC<OnboardingShellProps> = ({
             case 2: return <Day2KnowTheRules user={user} onComplete={() => handleDayComplete(2)} />;
             case 3: return <Day3LearnYourRole user={user} onComplete={() => handleDayComplete(3)} />;
             case 4: return <Day4BuildNetwork user={user} onComplete={() => handleDayComplete(4)} />;
-            case 5: return <Day5GoalsLaunch user={user} onGraduate={onGraduate} />;
+            case 5: return <Day5GoalsLaunch user={user} onGraduate={() => setIsGraduating(true)} />;
             default: return null;
         }
     };
 
-    const completedCount = Object.values(user.dayProgress || {}).filter(d => d?.completed).length;
+    const completedCount = [1, 2, 3, 4, 5].filter(day => user.dayProgress?.[day as OnboardingDay]?.completed).length;
     const progressPct = Math.round((completedCount / 5) * 100);
     const currentMeta = DAY_META.find(d => d.day === currentDay) || DAY_META[0];
 
@@ -220,6 +222,10 @@ const OnboardingShell: React.FC<OnboardingShellProps> = ({
             )}
         </div>
     );
+
+    if (isGraduating) {
+        return <GraduationCeremony user={user} onGraduate={onGraduate} />;
+    }
 
     return (
         <div className="min-h-screen bg-neutral-50 relative overflow-hidden">
