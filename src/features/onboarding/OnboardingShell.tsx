@@ -57,7 +57,8 @@ const OnboardingShell: React.FC<OnboardingShellProps> = ({
         if (user.dayProgress?.[day as OnboardingDay]?.completed) return 'completed';
         if (day === currentDay) return 'active';
         if (day <= (user.onboardingDay || 1)) return 'active';
-        return 'locked';
+        // For prototype exploration, unlock all days
+        return 'active';
     };
 
     const handleDayClick = (day: number) => {
@@ -135,7 +136,7 @@ const OnboardingShell: React.FC<OnboardingShellProps> = ({
                     <div className="absolute left-[19px] top-2 bottom-2 w-[2px] rounded-full bg-neutral-100" />
                     <div
                         className="absolute left-[19px] top-2 w-[2px] rounded-full bg-gradient-to-b from-brand-red to-red-300 transition-all duration-700"
-                        style={{ height: `${Math.max(0, (completedCount / 4) * 100)}%` }}
+                        style={{ height: `${Math.min(100, Math.max(0, (completedCount / 4) * 100))}%` }}
                     />
 
                     {/* Day nodes */}

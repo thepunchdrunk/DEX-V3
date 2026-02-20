@@ -21,11 +21,12 @@ const GraduationCeremony: React.FC<GraduationCeremonyProps> = ({
 
         const timer = setInterval(() => {
             setProgress(prev => {
-                if (prev >= 100) {
+                const next = prev + step;
+                if (next >= 100) {
                     clearInterval(timer);
                     return 100;
                 }
-                return prev + step;
+                return next;
             });
         }, interval);
 
@@ -54,7 +55,7 @@ const GraduationCeremony: React.FC<GraduationCeremonyProps> = ({
                     Launching Workplace
                 </h2>
                 <p className="text-sm text-neutral-500 mb-8 text-center">
-                    Preparing your personalized dashboard...
+                    Preparing your personalized Workplace...
                 </p>
 
                 {/* Progress Bar Container */}
